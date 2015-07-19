@@ -107,18 +107,11 @@
                         <ul class="dropdown-menu" role="menu">
                             <li>
                                 <table class="table table-striped" id="cart_table_internal_html">
-                                    {% for cart_item in cart_items %}
-                                    <tr>
-	                                    <td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src=""></a></div>
-	                                    </td>
-	                                    <td><div class="name_of_book_table_row">{{ cart_item.name }}</div>
-	                                    </td>
-	                                    <td>QTY </td>
-	                                    <td>Rs. </td>
-	                                    <td></td>
-                                    </tr>
-                                    <tr id="insert_after_block_for_navbar_cart_table"></tr>
-                                    {% endfor %}
+                                    {% if cart_items %}
+                                    yes
+                                    {% else %}
+                                    no
+                                    {% endif %}
                                 </table>
                             </li>
                         </ul>
