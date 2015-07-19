@@ -102,16 +102,30 @@
                         <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                             <span class="nav_glyph glyphicon glyphicon-shopping-cart"></span>
                             <span class="hidden-xs">Cart</span> 
-                            <span id="cart_count_navbar_text_innerhttml" class="badge hidden-xs">0</span>
+                            <span id="cart_count_navbar_text_innerhttml" class="badge hidden-xs">{{ cart_quantity }}</span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
                             <li>
                                 <table class="table table-striped" id="cart_table_internal_html">
-                                    {% if cart_items %}
-                                    yes
-                                    {% else %}
-                                    no
-                                    {% endif %}
+                                    {% for cart_item in cart_items %}
+                                    <tr>
+                                    <td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="{{ cart_item.image_url }}"></a></div></td>
+                                    <td><div class="name_of_book_table_row">{{ cart_item.name }}</div></td>
+                                    <td>QTY {{ cart_item.quantity }}</td>
+                                    <td>Rs. {{ cart_item.amount }}</td>
+                                    <td></td>
+                                    </tr>
+                                    <tr id="insert_after_block_for_navbar_cart_table"></tr>
+                                    {% endfor %}
+                                    <tr class="">
+                                    <td></td>
+                                    <td colspan="2">Sub-Total</td><td colspan="2">Rs. {{ cart_subtotal }}</td>
+                                    </tr>
+                                    <tr class="success">
+                                    <td></td>
+                                    <td colspan="2">Total</td><td colspan="2">Rs. {{ cart_total }}</td>
+                                    </tr>
+                                    <tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>
                                 </table>
                             </li>
                         </ul>
