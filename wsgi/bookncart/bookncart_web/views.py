@@ -12,7 +12,7 @@ from bookncart_web.models import *
 
 def index(request):
     # try:
-    del request.session['cart_items']
+    # del request.session['cart_items']
     best_selling_books = Books.objects.filter(stock__gt=0).order_by('-sell_count')[:30]
     top_rated_books = Books.objects.filter(stock__gt=0).order_by('-view_count')[:30]
     featured_books = Books.objects.filter(stock__gt=0).filter(is_featured__exact=1).order_by('-view_count')[:30]
