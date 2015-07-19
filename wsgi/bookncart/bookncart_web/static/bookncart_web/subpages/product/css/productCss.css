@@ -1,0 +1,34 @@
+.description_image_div {
+	margin: 10px;
+	border: #d9d9d9 2px solid;
+}
+
+.description_image {
+	margin: auto;
+	padding: 20px;
+}
+
+.file_structure {
+	margin: 20px 0px;
+}
+
+.quantity_button_group {
+	width: 150px;
+	margin: 15px 0px;
+}
+
+.breadcrumb > li + li:before {
+    content: "> ";
+}
+
+.cart_wishlist_buttons {
+	margin: 15px 0px;
+}
+
+.detail_name {
+	width: 15%;
+}
+
+.tab-content{
+	padding: 10px;
+}

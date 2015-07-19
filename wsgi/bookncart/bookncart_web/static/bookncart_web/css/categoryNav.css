@@ -1,0 +1,46 @@
+#listContainer a{
+	color: black;
+	text-decoration: none;
+}
+
+.clear {
+    clear: both;
+}
+
+#expList ul, li {
+    list-style: none;
+    margin:0;
+    padding:0;
+    cursor: pointer;
+}
+
+.subsubcategories li:hover {
+    
+}
+
+.subsubcategories li:hover .semester{
+    font-size: 18px;
+    color: #0000ff;
+}
+
+
+#expList li {
+    line-height:270%;
+    text-indent:0px;
+    background-position: 0px 15px;
+    padding-left: 20px;
+    background-repeat: no-repeat;
+}
+
+/* Collapsed state for list element */
+#expList .collapsed {
+    background-image: url(../img_site/ic_hardware_keyboard_arrow_up.png);
+}
+/* Expanded state for list element
+/* NOTE: This class must be located UNDER the collapsed one */
+#expList .expanded {
+    background-image: url(../img_site/ic_hardware_keyboard_arrow_down.png);
+}
+#expList {
+    clear: both;
+}

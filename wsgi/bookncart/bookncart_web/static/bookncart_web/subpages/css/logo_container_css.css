@@ -1,0 +1,22 @@
+.navbar_home{
+	position: absolute;
+	z-index: 1;
+}
+
+.logo_image{
+	width: 50vw;			
+	margin-left: 30px;
+	max-width: 250px;
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+
+.parallax-window{
+	height: 30vh;
+	width: 100%;
+}
+
+
+.margin_top_for_nav{
+	margin-top: 50px;
+}

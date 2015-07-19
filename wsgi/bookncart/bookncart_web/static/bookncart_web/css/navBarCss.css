@@ -1,0 +1,117 @@
+#dropdown-menu.dropdown-menu {
+	min-width: 200px;
+}
+#dropdown-menu.dropdown-menu.columns-2 {
+	min-width: 400px;
+}
+#dropdown-menu.dropdown-menu.columns-3 {
+	min-width: 600px;
+}
+#dropdown-menu.dropdown-menu li a {
+	padding: 5px 15px;
+	font-weight: 300;
+}
+#mc1,#mc2,#mc3,.multi-column-dropdown {
+	list-style: none;
+}
+#mc1,#mc2,#mc3,.multi-column-dropdown li a {
+	display: block;
+	clear: both;
+	line-height: 1.428571429;
+	color: #333;
+	white-space: normal;
+}
+#mc1,#mc2,#mc3,.multi-column-dropdown li a:hover {
+	text-decoration: none;
+	color: #262626;
+	background-color: white;
+}
+
+@media (max-width: 767px) {
+	.dropdown-menu.multi-column {
+		min-width: 240px !important;
+		overflow-x: hidden;
+	}
+}
+
+.navglyph {
+	font-size: 110%;
+}
+
+.navitem {
+	font-size: 110%;
+}
+
+#navbar_search_form{
+	padding: 0;
+	max-width: 70vw;	
+	width: 220px;
+}
+
+#navbar_search_input{
+	width: 100%;	
+}
+
+.navbarTransparentbackground{
+	background-color: rgba(0,0,0,0.5);
+	background-image: none;
+}
+
+#navbar_pc.navbar-inverse .navbar-brand {
+	color: rgba(255, 255, 255, 1);
+}
+
+#navbar_pc.navbar-inverse .navbar-nav>li>a {
+	color: rgba(255, 255, 255, 1);
+}
+
+#navbar_pc.navbar-inverse .navbar-nav>li>a:hover,
+#navbar_pc.navbar-inverse .navbar-nav>li>a:focus {
+	color: rgba(189, 189, 189, 1);
+}
+
+.navbar-nav .open .dropdown-menu {
+	height: auto;
+	max-height: 85vh;	
+	border-style: solid;
+	border-color: rgba(0,0,0,0.3);
+	border-width: 1px;
+	overflow-y: scroll;
+}
+
+@media (max-width: 768px) {
+	.navbar-nav .open .dropdown-menu {
+		height: auto;
+		max-height: 85vh;
+		float: none;
+		width: auto;
+		max-width: 90vw;
+		margin-top: 0;
+		overflow: scroll;
+		/*border: 0;*/
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+}
+
+.zero_margin_ul{
+	padding: 0;
+	margin: 0;
+}
+
+.transparent_bg{
+	background: transparent;
+}
+
+@media screen and (max-width: 767px) {	
+	.navbar-right > li {
+		margin-right: -10px;	
+	}
+}
+
+@media screen and (max-width: 300px) {
+	.navbar-right > li {
+		margin-right: -10px;
+		margin-left: -10px;
+	}	
+}

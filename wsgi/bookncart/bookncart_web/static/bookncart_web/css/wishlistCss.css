@@ -1,0 +1,72 @@
+.wishlist_image_div_table{
+	height: 70px;
+	width: 70px;
+	background-color: #eeeeee;
+	text-align: center;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.wishlist_image_book_table{
+	margin-top: 5%;
+	height: 90%;
+}
+
+.cross_button_wishlist{
+	background-color: #9e9e9e;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	text-align: center;
+	height: 30px;
+	width: 30px;
+}
+
+.cross_button_wishlist:hover{
+	background-color: #ff0000;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+	text-align: center;
+	height: 30px;
+	width: 30px;
+}
+
+.glyphicon_remove_large_wishlist{
+	font-size: 110%;
+	margin-top: 6px;
+	color: white;
+}
+
+@media (max-width: 360px){
+	.wishlist_image_div_table{
+		height: 50px;
+		width: 50px;
+	}
+	.name_of_book_table_row{
+		font-size: 12px;
+	}
+
+	.cross_button_wishlist{
+		height: 20px;
+		width: 20px;
+	}
+
+	.glyphicon_remove_large_wishlist{
+		font-size: 90%;
+		margin-top: 2px;
+		color: white;
+	}
+}
+
+@media (max-width: 336px){
+	.wishlist_image_div_table{
+		height: 40px;
+		width: 40px;
+	}
+}
+
+@media (max-width: 282px){
+	.wishlist_image_div_table{
+		height: 30px;
+		width: 30px;
+	}
+}

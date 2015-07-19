@@ -1,0 +1,16 @@
+.breadcrumb > li + li:before {
+    content: "> ";
+}
+
+.product_height_305{
+    margin-top: 20px;
+    height: 305px;
+}
+
+.file_structure {
+	margin: 20px 0px;
+}
+
+.show_products_as_slick_without_slick{
+    margin-top: 30px;
+}

@@ -1,0 +1,63 @@
+.modal_p {
+	text-align: center;
+	padding: 0px 0px;
+	padding-top: 10px;
+}
+
+#fb_login_button {
+	border-radius: 2px;
+}
+
+#google_login_button{
+	border-radius: 2px;
+}
+
+.modal_button_text {
+	font-size: 14px;
+}
+
+#login_button_1 {
+	border-radius: 2px;
+}
+
+#login_button_2 {
+	border-radius: 2px;
+}
+
+.myform {
+	border-radius: 0px;
+	height: 50px;
+}
+
+#login_modal {	
+	position: relative;
+	background-color: transparent;
+	-webkit-background-clip: initial;
+	background-clip: initial;
+	border: none;
+	border: none;
+	border-radius: 0px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	width: 100%;
+	text-align: center;
+}
+
+#modal_window {
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 375px; 
+	width: 92%;
+}
+
+.bs-example-modal-sm{
+	width: 100%;
+}
+
+.modal_login_body{
+	background-color: white;
+	padding: 25px 25px 15px 25px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}

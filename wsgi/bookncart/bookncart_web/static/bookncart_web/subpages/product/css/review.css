@@ -1,0 +1,19 @@
+.new_review_container{
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    box-shadow: 3px 3px 7px #e0e0e0;
+}
+
+.margin_left_right{
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.review_old_reviews{
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% extends "bookncart_web/base.html" %}
+	{% load staticfiles %}
+	{% block css_block %}
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>BooksCart</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/bootstrap/css/bootstrap.min.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/slick/slick.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/slick/slick-theme.css' %}"/>
+
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/css/navBarCss.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/css/wishlistCss.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/css/cartCSS.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/css/modalCss.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/css/categoryNav.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/css/footerCss.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/css/carousel.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/toastr/toastr.min.css' %}">
+	{% endblock css_block %}
+</head>
+<body>
+
+	{% block content_block %}
+	<div id="up_button_floating"><span class="glyphicon glyphicon-chevron-up" id="up_button_floating_glyph"></span></div>
+
+	<div class="carousel_container 60_percent_height_javascript">
+		<div class="carousel_slick 60_percent_height_javascript">
+			<div class="carousel_div_1 60_percent_height_javascript"></div>
+			<div class="carousel_div_2 60_percent_height_javascript"></div>
+			<div class="carousel_div_3 60_percent_height_javascript"></div>
+			<div class="carousel_div_4 60_percent_height_javascript"></div>
+			<div class="carousel_div_5 60_percent_height_javascript"></div>
+		</div>
+		<div class="navbar_home">
+			<a href="#"><img src="{% static 'bookncart_web/img_site/logo.png' %}" class="logo_image"></a>
+		</div>
+	</div>
+
+	<div class="container">
+		<p class="heading_category">Best Selling Books</p>
+	</div>
+
+	<div class="container show_products_as_slick">
+		{% if best_selling_books %}
+		{% for book in best_selling_books %}
+		<div class="product_div">
+			<div class="product_image_div">
+				<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+			</div>
+			<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
+			<div class="product_price">Rs. {{ book.price }}</div>
+			<div class="buttons_group">
+				<div class="button_cart" onclick="addToCartFunction({{ book.id }})">
+					<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
+					<span class="small_text_cart">ADD TO CART</span>
+				</div>
+				<div class="button_favourite">
+					<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
+				</div>
+				<div class="button_compare">
+					<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		{% endif %}
+	</div>
+
+	<div class="container">
+		<p class="heading_category">Top Rated Books</p>
+	</div>
+
+	<div class="container show_products_as_slick">
+		{% if top_rated_books %}
+		{% for book in top_rated_books %}
+		<div class="product_div">
+			<div class="product_image_div">
+				<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+			</div>
+			<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
+			<div class="product_price">Rs. {{ book.price }}</div>
+			<div class="buttons_group">
+				<div class="button_cart">
+					<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
+					<span class="small_text_cart">ADD TO CART</span>
+				</div>
+				<div class="button_favourite">
+					<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
+				</div>
+				<div class="button_compare">
+					<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		{% endif %}
+	</div>
+
+	<div class="container">
+		<p class="heading_category">Featured Books</p>
+	</div>
+
+	<div class="container show_products_as_slick">
+		{% if featured_books %}
+		{% for book in featured_books %}
+		<div class="product_div">
+			<div class="product_image_div">
+				<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+			</div>
+			<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
+			<div class="product_price">Rs. {{ book.price }}</div>
+			<div class="buttons_group">
+				<div class="button_cart">
+					<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
+					<span class="small_text_cart">ADD TO CART</span>
+				</div>
+				<div class="button_favourite">
+					<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
+				</div>
+				<div class="button_compare">
+					<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		{% endif %}
+	</div>
+
+	<div class="container">
+		<p class="heading_category">New Added Books</p>
+	</div>
+
+	<div class="container show_products_as_slick">
+		{% if new_added_books %}
+		{% for book in new_added_books %}
+		<div class="product_div">
+			<div class="product_image_div">
+				<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+			</div>
+			<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
+			<div class="product_price">Rs. {{ book.price }}</div>
+			<div class="buttons_group">
+				<div class="button_cart">
+					<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
+					<span class="small_text_cart">ADD TO CART</span>
+				</div>
+				<div class="button_favourite">
+					<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
+				</div>
+				<div class="button_compare">
+					<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		{% endif %}
+	</div>
+	{% endblock content_block %}
+
+	{% block js_block %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="{% static 'bookncart_web/bootstrap/js/bootstrap.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'bookncart_web/slick/slick.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'bookncart_web/js/modernizr.js' %}"></script>
+	<script type="text/javascript" src="{% static 'bookncart_web/toastr/toastr.min.js' %}"></script>
+
+	<script type="text/javascript" src="{% static 'bookncart_web/js/main.js' %}"></script>
+	<script type="text/javascript">
+		function addToCartFunction(id){
+			$.ajax({
+				url : "add_to_cart/",
+				type : "POST",
+				data : { book_id : id },
+				success : function(response){
+					addBookInCartNavbar(response);	
+				},
+				error : function(xhr, errormsg ,err){
+					alert(xhr.responseText  + err + errormsg);
+				}
+			});
+		}
+
+		function addBookInCartNavbar(response){
+			var new_html = '';
+			for(var i=0;i<response.cart_items.length;i++){
+				new_html += '<tr><td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="' + response.cart_items[i].image_url + '"></a></div></td><td><div class="name_of_book_table_row">' + response.cart_items[i].name + '</div></td><td>QTY ' + response.cart_items[i].quantity + '</td><td>Rs. ' + response.cart_items[i].amount + '</td><td></td></tr><tr id="insert_after_block_for_navbar_cart_table"></tr>';
+			}
+			new_html += '<tr class=""><td></td><td colspan="2">Sub-Total</td><td colspan="2">Rs.' + response.subtotal + '</td></tr><tr class="success"><td></td><td colspan="2">Total</td><td colspan="2">Rs. ' + response.total + '</td></tr><tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>';
+			$("#cart_table_internal_html").html(new_html);
+
+			toastr.options = {
+				"closeButton": true,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": true,
+				"positionClass": "toast-bottom-center",
+				"preventDuplicates": false,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": "1500",
+				"extendedTimeOut": "1500",
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+			}
+			if(response.error_message == null){
+				toastr.success('Successfully added book to cart');	
+			}else{
+				toastr.error(response.error_message);
+			}
+
+			$("#cart_count_navbar_text_innerhttml").html(response.quantity);
+		}
+	</script>
+	{% endblock js_block %}
+</body>
+</html>
