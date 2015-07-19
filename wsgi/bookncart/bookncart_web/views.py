@@ -12,18 +12,18 @@ from bookncart_web.models import *
 
 def index(request):
     # try:
-    # del request.session['cart_items']
-    best_selling_books = Books.objects.filter(stock__gt=0).order_by('-sell_count')[:30]
-    top_rated_books = Books.objects.filter(stock__gt=0).order_by('-view_count')[:30]
-    featured_books = Books.objects.filter(stock__gt=0).filter(is_featured__exact=1).order_by('-view_count')[:30]
-    new_added_books = Books.objects.filter(stock__gt=0).order_by('-upload_date')[:30]
-    context = RequestContext(request, {
-        'best_selling_books': best_selling_books,
-        'top_rated_books': top_rated_books,
-        'featured_books': featured_books,
-        'new_added_books': new_added_books
-    }, [view_for_requestcontext_data_common_view])
-    return render(request, 'bookncart_web/index.html', context)
+        # del request.session['cart_items']
+        best_selling_books = Books.objects.filter(stock__gt=0).order_by('-sell_count')[:30]
+        top_rated_books = Books.objects.filter(stock__gt=0).order_by('-view_count')[:30]
+        featured_books = Books.objects.filter(stock__gt=0).filter(is_featured__exact=1).order_by('-view_count')[:30]
+        new_added_books = Books.objects.filter(stock__gt=0).order_by('-upload_date')[:30]
+        context = RequestContext(request, {
+            'best_selling_books': best_selling_books,
+            'top_rated_books': top_rated_books,
+            'featured_books': featured_books,
+            'new_added_books': new_added_books
+        }, [view_for_requestcontext_data_common_view])
+        return render(request, 'bookncart_web/index.html', context)
     # except:
     #     raise Http404('Internal error occurred in index view')
 
@@ -104,7 +104,16 @@ def view_for_requestcontext_data_common_view(request):
     top_category = Categories.objects.filter(is_root__exact=1)
     sub_category = Categories.objects.filter(is_root__exact=0).filter(is_last__exact=0)
     subsub_category = Categories.objects.filter(is_last__exact=1)
+    cart_items = []
+    if request.user.is_authenticated():
+        pass
+    else:
+        try:
+            cart_items = request.session['cart_items']
+        except:
+            cart_items = []
     context = {'top_category': top_category,
                'sub_category': sub_category,
-               'subsub_category': subsub_category}
+               'subsub_category': subsub_category,
+               'cart_items': cart_items}
     return context
