@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.7/howto/deployment/wsgi/
 
 import os
 # GETTING-STARTED: change 'myproject' to your project name:
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bookncart.settings")
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()

@@ -1,5 +1,5 @@
 """
-Django settings for myproject project.
+Django settings for bookncart project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -49,9 +49,9 @@ MIDDLEWARE_CLASSES = (
 )
 
 # GETTING-STARTED: change 'myproject' to your project name:
-ROOT_URLCONF = 'myproject.urls'
+ROOT_URLCONF = 'bookncart.urls'
 
-WSGI_APPLICATION = 'myproject.wsgi.application'
+WSGI_APPLICATION = 'bookncart.wsgi.application'
 
 
 # Database
