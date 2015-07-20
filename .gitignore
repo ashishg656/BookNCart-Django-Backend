@@ -5,3 +5,5 @@
 *~
 .project
 .pydevproject
+
+wsgi/bookncart/media/**
