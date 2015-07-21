@@ -59,6 +59,42 @@ def add_to_favourites(request):
 
 
 @csrf_exempt
+def delete_from_cart(request):
+    if request.method == 'POST':
+        book_id = request.POST.get('book_id')
+        book_cart = get_object_or_404(Books, pk=book_id)
+        try:
+            new_cart_items = []
+            cart_items = request.session['cart_items']
+            for cart_item in cart_items:
+                if cart_item['id'] == book_cart.id:
+                    pass
+                else:
+                    new_cart_items.append(cart_item)
+
+            request.session['cart_items'] = new_cart_items
+
+            cart_items = new_cart_items
+            subtotal = 0
+            quantity = 0
+            for cart_item in cart_items:
+                subtotal += cart_item['amount']
+                quantity += cart_item['quantity']
+            total = subtotal + 50
+            if subtotal == 0:
+                total = 0
+
+            request.session['cart_subtotal'] = subtotal
+            request.session['cart_total'] = total
+            request.session['cart_quantity'] = quantity
+
+            return JsonResponse({'cart_items': cart_items, 'subtotal': subtotal, 'quantity': quantity, 'total': total,
+                                 'message_type': 'delete'})
+        except:
+            return Http404
+
+
+@csrf_exempt
 def add_to_cart(request):
     if request.method == 'POST':
         book_id = request.POST.get('book_id')
@@ -102,7 +138,7 @@ def add_to_cart(request):
         request.session['cart_quantity'] = quantity
 
         return JsonResponse({'cart_items': cart_items, 'subtotal': subtotal, 'quantity': quantity, 'total': total,
-                             'error_message': error_message})
+                             'error_message': error_message, 'message_type': 'add'})
 
 
 def view_for_requestcontext_data_common_view(request):

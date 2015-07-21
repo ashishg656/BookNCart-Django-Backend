@@ -7,6 +7,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id" content="509487250429-pekgqlshg58mfqm6adctmvm3ul9nlbjr.apps.googleusercontent.com">
 	<title>BooksCart</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/bootstrap/css/bootstrap.min.css' %}"/>
 	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/slick/slick.css' %}"/>
@@ -175,6 +177,24 @@
 
 	<script type="text/javascript" src="{% static 'bookncart_web/js/main.js' %}"></script>
 	<script type="text/javascript">
+		toastr.options = {
+			"closeButton": true,
+			"debug": false,
+			"newestOnTop": false,
+			"progressBar": true,
+			"positionClass": "toast-bottom-center",
+			"preventDuplicates": false,
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "1500",
+			"extendedTimeOut": "1500",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		}
+
 		function addToCartFunction(id){
 			$.ajax({
 				url : "add_to_cart/",
@@ -192,36 +212,50 @@
 		function addBookInCartNavbar(response){
 			var new_html = '';
 			for(var i=0;i<response.cart_items.length;i++){
-				new_html += '<tr><td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="' + response.cart_items[i].image_url + '"></a></div></td><td><div class="name_of_book_table_row">' + response.cart_items[i].name + '</div></td><td>QTY ' + response.cart_items[i].quantity + '</td><td>Rs. ' + response.cart_items[i].amount + '</td><td></td></tr><tr id="insert_after_block_for_navbar_cart_table"></tr>';
+				new_html += '<tr><td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="' + response.cart_items[i].image_url + '"></a></div></td><td><div class="name_of_book_table_row">' + response.cart_items[i].name + '</div></td><td>QTY ' + response.cart_items[i].quantity + '</td><td>Rs. ' + response.cart_items[i].amount + '</td><td><div class="cross_button_cart" onclick="removeFromCartFunction(' + response.cart_items[i].id + ')"><span class="glyphicon glyphicon-remove glyphicon_remove_large_cart"></span></div></td></tr><tr id="insert_after_block_for_navbar_cart_table"></tr>';
 			}
 			new_html += '<tr class=""><td></td><td colspan="2">Sub-Total</td><td colspan="2">Rs.' + response.subtotal + '</td></tr><tr class="success"><td></td><td colspan="2">Total</td><td colspan="2">Rs. ' + response.total + '</td></tr><tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>';
 			$("#cart_table_internal_html").html(new_html);
 
-			toastr.options = {
-				"closeButton": true,
-				"debug": false,
-				"newestOnTop": false,
-				"progressBar": true,
-				"positionClass": "toast-bottom-center",
-				"preventDuplicates": false,
-				"onclick": null,
-				"showDuration": "300",
-				"hideDuration": "1000",
-				"timeOut": "1500",
-				"extendedTimeOut": "1500",
-				"showEasing": "swing",
-				"hideEasing": "linear",
-				"showMethod": "fadeIn",
-				"hideMethod": "fadeOut"
-			}
 			if(response.error_message == null){
-				toastr.success('Successfully added book to cart');	
+				if(response.message_type == 'add'){
+					toastr.success('Successfully added book to cart');	
+				}else if(response.message_type == 'delete'){
+					toastr.success('Successfully deleted book from cart');	
+				}
 			}else{
 				toastr.error(response.error_message);
 			}
 
 			$("#cart_count_navbar_text_innerhttml").html(response.quantity);
 		}
+
+		function removeFromCartFunction(id){
+			$.ajax({
+				url : "delete_from_cart/",
+				type : "POST",
+				data : { book_id : id },
+				success : function(response){
+					addBookInCartNavbar(response);	
+				},
+				error : function(xhr, errormsg ,err){
+					alert(xhr.responseText  + err + errormsg);
+				}
+			});
+		}
+
+		function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId());
+        console.log("Name: " + profile.getName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+	
+		var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      };
+
+
 	</script>
 	{% endblock js_block %}
 </body>

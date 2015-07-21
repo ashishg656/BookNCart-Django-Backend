@@ -6,4 +6,5 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^books/(?P<book_id>[0-9]+)/$', views.book_detail, name='book_detail'),
     url(r'^add_to_cart/' , views.add_to_cart, name='add_to_cart'),
+    url(r'^delete_from_cart/' , views.delete_from_cart, name='delete_from_cart'),
 ]

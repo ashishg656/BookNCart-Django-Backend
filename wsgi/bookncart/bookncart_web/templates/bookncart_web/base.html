@@ -26,28 +26,28 @@
                                     {% for top_category_i in top_category %}
                                     <li class="categories">{{ top_category_i.name }}
                                     	<ul class="subcategories">
-                                    	{% for sub_category_i in sub_category %}
-                                    		{% if sub_category_i.parent_id.id == top_category_i.id %}
-                                    		<li>{{ sub_category_i.name }}
-                                    			<ul class="subsubcategories">
-                                    			{% for subsub_category_i in subsub_category %}
-                                    			{% if subsub_category_i.parent_id.id ==  sub_category_i.id %}
-                                    				<li><a href="#"><span class="semester">{{ subsub_category_i.name }}</span></a></li>
-                                    			{% endif %}
-                                    			{% endfor %}
-                                    			</ul>
-                                    			</li>
-                                    		{% endif %}
-                                    	{% endfor %}
-                                    {% endfor %}
-                                </ul>
-                                </li>
-                            </div>
-                        </ul>
-                    </li>
+                                           {% for sub_category_i in sub_category %}
+                                           {% if sub_category_i.parent_id.id == top_category_i.id %}
+                                           <li>{{ sub_category_i.name }}
+                                             <ul class="subsubcategories">
+                                                 {% for subsub_category_i in subsub_category %}
+                                                 {% if subsub_category_i.parent_id.id ==  sub_category_i.id %}
+                                                 <li><a href="#"><span class="semester">{{ subsub_category_i.name }}</span></a></li>
+                                                 {% endif %}
+                                                 {% endfor %}
+                                             </ul>
+                                         </li>
+                                         {% endif %}
+                                         {% endfor %}
+                                         {% endfor %}
+                                     </ul>
+                                 </li>
+                             </div>
+                         </ul>
+                     </li>
 
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
+                 </ul>
+                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden-xs hidden-sm">
                         <form class="navbar-form" id="navbar_search_form" role="search">
                             <div class="input-group" id="navbar_search_input">
@@ -109,21 +109,21 @@
                                 <table class="table table-striped" id="cart_table_internal_html">
                                     {% for cart_item in cart_items %}
                                     <tr>
-                                    <td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="{{ cart_item.image_url }}"></a></div></td>
-                                    <td><div class="name_of_book_table_row">{{ cart_item.name }}</div></td>
-                                    <td>QTY {{ cart_item.quantity }}</td>
-                                    <td>Rs. {{ cart_item.amount }}</td>
-                                    <td></td>
+                                        <td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="{{ cart_item.image_url }}"></a></div></td>
+                                        <td><div class="name_of_book_table_row">{{ cart_item.name }}</div></td>
+                                        <td>QTY {{ cart_item.quantity }}</td>
+                                        <td>Rs. {{ cart_item.amount }}</td>
+                                        <td><div class="cross_button_cart" onclick="removeFromCartFunction({{ cart_item.id }})"><span class="glyphicon glyphicon-remove glyphicon_remove_large_cart"></span></div></td>
                                     </tr>
                                     <tr id="insert_after_block_for_navbar_cart_table"></tr>
                                     {% endfor %}
                                     <tr class="">
-                                    <td></td>
-                                    <td colspan="2">Sub-Total</td><td colspan="2">Rs. {{ cart_subtotal }}</td>
+                                        <td></td>
+                                        <td colspan="2">Sub-Total</td><td colspan="2">Rs. {{ cart_subtotal }}</td>
                                     </tr>
                                     <tr class="success">
-                                    <td></td>
-                                    <td colspan="2">Total</td><td colspan="2">Rs. {{ cart_total }}</td>
+                                        <td></td>
+                                        <td colspan="2">Total</td><td colspan="2">Rs. {{ cart_total }}</td>
                                     </tr>
                                     <tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>
                                 </table>
@@ -134,78 +134,79 @@
                     <li class="modal_parent_li">
                         <a data-toggle="modal" data-target=".bs-example-modal-sm" class="navitem" href="#"><span class="nav_glyph glyphicon glyphicon-user"></span>
                             <span class="hidden-xs">My Account</span></a>
-                        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                            <div id="modal_window" class="modal-dialog modal-sm">
-                                <div id="login_modal" class="modal-content">
+                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div id="modal_window" class="modal-dialog modal-sm">
+                                    <div id="login_modal" class="modal-content">
 
-                                    <div class="visible_for_login">
-                                        <div class="modal-body modal_login_body">
-                                            <button type="button" id="fb_login_button" class="btn btn-primary btn-lg btn-block"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_fb.png' %}" alt="FB logo"> Connect With Facebook</span></button>
-                                            <p class="modal_p">or</p>
-                                            <button type="button" id="google_login_button" class="btn btn-danger btn-lg btn-block" style="margin-bottom:10px"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_google.png' %}" alt="FB logo"> Connect With Google+</span></button>
+                                        <div class="visible_for_login">
+                                            <div class="modal-body modal_login_body">
+                                                <button type="button" id="fb_login_button" class="btn btn-primary btn-lg btn-block"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_fb.png' %}" alt="FB logo"> Connect With Facebook</span></button>
+                                                <p class="modal_p">or</p>
+                                                <button type="button" id="google_login_button" class="btn btn-danger btn-lg btn-block" style="margin-bottom:10px"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_google.png' %}" alt="FB logo"> Connect With Google+</span></button>
+                                                <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"  data-width="200" data-height="50" data-longtitle="true"></div>
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-	{% endblock navbar_block %}
+        {% endblock navbar_block %}
 
-	{% block content_block %}
-	{% endblock content_block %}	
+        {% block content_block %}
+        {% endblock content_block %}	
 
-	{% block footer_block %}
-	<footer class="my_footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-3">
-					<h5 class="footer_heading">Information</h5>
-					<ul class="list-unstyled">
-						<li><a href="#">About Us</a></li>
-						<li>Shipping</li>
-						<li>Privacy Policy</li>
-						<li>Terms &amp; Conditions</li>
-					</ul>
-				</div>
-				<div class="col-sm-3">
-					<h5 class="footer_heading">Customer Service</h5>
-					<ul class="list-unstyled">
-						<li>Contact Us</li>
-						<li>Returns</li>
-						<li>Site Map</li>
-					</ul>
-				</div>
-				<div class="col-sm-3">
-					<h5 class="footer_heading">Extras</h5>
-					<ul class="list-unstyled">
-						<li>Brands</li>
-						<li>Gift Vouchers</li>
-						<li>Affiliates</li>
-						<li>Specials</li>
-					</ul>
-				</div>
-				<div class="col-sm-3">
-					<h5 class="footer_heading">My Account</h5>
-					<ul class="list-unstyled">
-						<li>My Account</li>
-						<li>Order History</li>
-						<li>Wishlist</li>
-						<li>Newsletter</li>
-					</ul>
-				</div>
-			</div>
-			<hr>
-			<p>TheBookStore &copy; 2015</p>
-		</div>
-	</footer>
-	{% endblock footer_block %}
+        {% block footer_block %}
+        <footer class="my_footer">
+          <div class="container">
+             <div class="row">
+                <div class="col-sm-3">
+                   <h5 class="footer_heading">Information</h5>
+                   <ul class="list-unstyled">
+                      <li><a href="#">About Us</a></li>
+                      <li>Shipping</li>
+                      <li>Privacy Policy</li>
+                      <li>Terms &amp; Conditions</li>
+                  </ul>
+              </div>
+              <div class="col-sm-3">
+               <h5 class="footer_heading">Customer Service</h5>
+               <ul class="list-unstyled">
+                  <li>Contact Us</li>
+                  <li>Returns</li>
+                  <li>Site Map</li>
+              </ul>
+          </div>
+          <div class="col-sm-3">
+           <h5 class="footer_heading">Extras</h5>
+           <ul class="list-unstyled">
+              <li>Brands</li>
+              <li>Gift Vouchers</li>
+              <li>Affiliates</li>
+              <li>Specials</li>
+          </ul>
+      </div>
+      <div class="col-sm-3">
+       <h5 class="footer_heading">My Account</h5>
+       <ul class="list-unstyled">
+          <li>My Account</li>
+          <li>Order History</li>
+          <li>Wishlist</li>
+          <li>Newsletter</li>
+      </ul>
+  </div>
+</div>
+<hr>
+<p>TheBookStore &copy; 2015</p>
+</div>
+</footer>
+{% endblock footer_block %}
 
-	{% block js_block %}
-	{% endblock js_block %}
+{% block js_block %}
+{% endblock js_block %}
 </body>
 </html>
