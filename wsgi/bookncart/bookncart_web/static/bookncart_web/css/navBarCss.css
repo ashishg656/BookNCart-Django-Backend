@@ -115,3 +115,7 @@
 		margin-left: -10px;
 	}	
 }
+
+#my_account_nav_item{
+	display: none;
+}

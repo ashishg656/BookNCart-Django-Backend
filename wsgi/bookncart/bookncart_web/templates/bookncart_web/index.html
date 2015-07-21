@@ -7,8 +7,6 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://apis.google.com/js/platform.js" async defer></script>
-	<meta name="google-signin-client_id" content="509487250429-pekgqlshg58mfqm6adctmvm3ul9nlbjr.apps.googleusercontent.com">
 	<title>BooksCart</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/bootstrap/css/bootstrap.min.css' %}"/>
 	<link rel="stylesheet" type="text/css" href="{% static 'bookncart_web/slick/slick.css' %}"/>
@@ -176,6 +174,7 @@
 	<script type="text/javascript" src="{% static 'bookncart_web/toastr/toastr.min.js' %}"></script>
 
 	<script type="text/javascript" src="{% static 'bookncart_web/js/main.js' %}"></script>
+	<script src="https://apis.google.com/js/api:client.js"></script>
 	<script type="text/javascript">
 		toastr.options = {
 			"closeButton": true,
@@ -194,6 +193,75 @@
 			"showMethod": "fadeIn",
 			"hideMethod": "fadeOut"
 		}
+
+		var googleUser = {};
+		var startApp = function() {
+			gapi.load('auth2', function(){
+				auth2 = gapi.auth2.init({
+					client_id: '509487250429-pekgqlshg58mfqm6adctmvm3ul9nlbjr.apps.googleusercontent.com',					
+				});
+				attachSignin(document.getElementById('google_login_button'));
+			});
+		};
+
+		function attachSignin(element) {
+			auth2.attachClickHandler(element, {},
+				function(googleUser) {
+					var profile = googleUser.getBasicProfile();
+					console.log("ID: " + profile.getId());
+					console.log("Name: " + profile.getName());
+					console.log("Image URL: " + profile.getImageUrl());
+					console.log("Email: " + profile.getEmail());
+
+					var id_token = googleUser.getAuthResponse().id_token;
+					console.log("ID Token: " + id_token);
+					populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
+				}, function(error) {
+					alert(JSON.stringify(error, undefined, 2));
+				});
+			auth2.then(function(){
+				checkIfLoggedInThroughGoogle();
+			}, function(error_reason){
+				alert('unable to initialise google login ' + error_reason);
+			});
+		}
+
+		function checkIfLoggedInThroughGoogle(){
+			if (auth2.isSignedIn.get()) {
+				var profile = auth2.currentUser.get().getBasicProfile();
+				console.log('ID: ' + profile.getId());
+				console.log('Name: ' + profile.getName() + " was logged in already");
+				console.log('Image URL: ' + profile.getImageUrl());
+				console.log('Email: ' + profile.getEmail());
+				populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
+			}
+		}
+
+		function populateDataInNavbarMyAccountItemWhenUserIsLoggedIn(){
+			var profile = auth2.currentUser.get().getBasicProfile();
+			$('.bs-example-modal-sm').modal('hide');
+			$("#my_account_nav_item").show();
+			$("#login_with_fb_and_google_navitem").hide();
+			toastr.info('Welcome ' + profile.getName() + '. You have been logged in successfully..Happy Shopping');
+		}
+
+		$("#sign_out_user_nav").click(function(){
+			var auth2 = gapi.auth2.getAuthInstance();
+			if (auth2.isSignedIn.get()) {
+				auth2.signOut().then(function () {
+					console.log('User signed out.');
+					populateDataInNavbarMyAccountItemWhenUserIsLoggedOut();
+				});
+			}
+		});
+
+		function populateDataInNavbarMyAccountItemWhenUserIsLoggedOut(){
+			$("#my_account_nav_item").hide();
+			$("#login_with_fb_and_google_navitem").show();
+			toastr.info('You have been logged out successfully');
+		}
+
+		startApp();
 
 		function addToCartFunction(id){
 			$.ajax({
@@ -243,18 +311,6 @@
 				}
 			});
 		}
-
-		function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId());
-        console.log("Name: " + profile.getName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
-	
-		var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-      };
-
 
 	</script>
 	{% endblock js_block %}

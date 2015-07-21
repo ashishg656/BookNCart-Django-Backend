@@ -131,8 +131,8 @@
                         </ul>
                     </li>
 
-                    <li class="modal_parent_li">
-                        <a data-toggle="modal" data-target=".bs-example-modal-sm" class="navitem" href="#"><span class="nav_glyph glyphicon glyphicon-user"></span>
+                    <li class="modal_parent_li" id="login_with_fb_and_google_navitem">
+                        <a data-toggle="modal" data-target=".bs-example-modal-sm" class="navitem" href="#" aria-expanded="false"><span class="nav_glyph glyphicon glyphicon-user"></span>
                             <span class="hidden-xs">My Account</span></a>
                             <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                                 <div id="modal_window" class="modal-dialog modal-sm">
@@ -143,13 +143,24 @@
                                                 <button type="button" id="fb_login_button" class="btn btn-primary btn-lg btn-block"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_fb.png' %}" alt="FB logo"> Connect With Facebook</span></button>
                                                 <p class="modal_p">or</p>
                                                 <button type="button" id="google_login_button" class="btn btn-danger btn-lg btn-block" style="margin-bottom:10px"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_google.png' %}" alt="FB logo"> Connect With Google+</span></button>
-                                                <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"  data-width="200" data-height="50" data-longtitle="true"></div>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
+                        </li>
+                        <li class="dropdown" id="my_account_nav_item">
+	                        <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+	                            <span class="nav_glyph glyphicon glyphicon-user"></span>
+	                            <span class="hidden-xs">My Account</span>
+	                        </a>
+	                        <ul class="dropdown-menu" role="menu">
+	                           	<li><a href="#">My Account</a></li>
+					            <li><a href="#">Another action</a></li>
+					            <li role="separator" class="divider"></li>
+					            <li id="sign_out_user_nav"><a href="#">Sign Out</a></li>
+	                        </ul>                               
                         </li>
                     </ul>
                 </div>
