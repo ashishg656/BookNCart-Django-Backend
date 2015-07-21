@@ -25,6 +25,23 @@
 	{% endblock css_block %}
 </head>
 <body>
+	<script>
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '509658639190611',
+				xfbml      : true,
+				version    : 'v2.4'
+			});
+		};
+
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
 
 	{% block content_block %}
 	<div id="loading_indicator_div"></div>
@@ -46,273 +63,276 @@
 
 	<div class="container">
 		<p class="heading_category">Best Selling Books</p>
+		<div class="fb-like" data-share="true" data-width="450" data-show-faces="true">
+		</div>
 	</div>
+</div>
 
-	<div class="container show_products_as_slick">
-		{% if best_selling_books %}
-		{% for book in best_selling_books %}
-		<div class="product_div">
-			<div class="product_image_div">
-				<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+<div class="container show_products_as_slick">
+	{% if best_selling_books %}
+	{% for book in best_selling_books %}
+	<div class="product_div">
+		<div class="product_image_div">
+			<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+		</div>
+		<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
+		<div class="product_price">Rs. {{ book.price }}</div>
+		<div class="buttons_group">
+			<div class="button_cart" onclick="addToCartFunction({{ book.id }})">
+				<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
+				<span class="small_text_cart">ADD TO CART</span>
 			</div>
-			<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
-			<div class="product_price">Rs. {{ book.price }}</div>
-			<div class="buttons_group">
-				<div class="button_cart" onclick="addToCartFunction({{ book.id }})">
-					<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
-					<span class="small_text_cart">ADD TO CART</span>
-				</div>
-				<div class="button_favourite">
-					<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
-				</div>
-				<div class="button_compare">
-					<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
-				</div>
+			<div class="button_favourite">
+				<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
+			</div>
+			<div class="button_compare">
+				<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
 			</div>
 		</div>
-		{% endfor %}
-		{% endif %}
 	</div>
+	{% endfor %}
+	{% endif %}
+</div>
 
-	<div class="container">
-		<p class="heading_category">Top Rated Books</p>
-	</div>
+<div class="container">
+	<p class="heading_category">Top Rated Books</p>
+</div>
 
-	<div class="container show_products_as_slick">
-		{% if top_rated_books %}
-		{% for book in top_rated_books %}
-		<div class="product_div">
-			<div class="product_image_div">
-				<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+<div class="container show_products_as_slick">
+	{% if top_rated_books %}
+	{% for book in top_rated_books %}
+	<div class="product_div">
+		<div class="product_image_div">
+			<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+		</div>
+		<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
+		<div class="product_price">Rs. {{ book.price }}</div>
+		<div class="buttons_group">
+			<div class="button_cart">
+				<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
+				<span class="small_text_cart">ADD TO CART</span>
 			</div>
-			<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
-			<div class="product_price">Rs. {{ book.price }}</div>
-			<div class="buttons_group">
-				<div class="button_cart">
-					<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
-					<span class="small_text_cart">ADD TO CART</span>
-				</div>
-				<div class="button_favourite">
-					<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
-				</div>
-				<div class="button_compare">
-					<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
-				</div>
+			<div class="button_favourite">
+				<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
+			</div>
+			<div class="button_compare">
+				<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
 			</div>
 		</div>
-		{% endfor %}
-		{% endif %}
 	</div>
+	{% endfor %}
+	{% endif %}
+</div>
 
-	<div class="container">
-		<p class="heading_category">Featured Books</p>
-	</div>
+<div class="container">
+	<p class="heading_category">Featured Books</p>
+</div>
 
-	<div class="container show_products_as_slick">
-		{% if featured_books %}
-		{% for book in featured_books %}
-		<div class="product_div">
-			<div class="product_image_div">
-				<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+<div class="container show_products_as_slick">
+	{% if featured_books %}
+	{% for book in featured_books %}
+	<div class="product_div">
+		<div class="product_image_div">
+			<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+		</div>
+		<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
+		<div class="product_price">Rs. {{ book.price }}</div>
+		<div class="buttons_group">
+			<div class="button_cart">
+				<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
+				<span class="small_text_cart">ADD TO CART</span>
 			</div>
-			<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
-			<div class="product_price">Rs. {{ book.price }}</div>
-			<div class="buttons_group">
-				<div class="button_cart">
-					<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
-					<span class="small_text_cart">ADD TO CART</span>
-				</div>
-				<div class="button_favourite">
-					<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
-				</div>
-				<div class="button_compare">
-					<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
-				</div>
+			<div class="button_favourite">
+				<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
+			</div>
+			<div class="button_compare">
+				<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
 			</div>
 		</div>
-		{% endfor %}
-		{% endif %}
 	</div>
+	{% endfor %}
+	{% endif %}
+</div>
 
-	<div class="container">
-		<p class="heading_category">New Added Books</p>
-	</div>
+<div class="container">
+	<p class="heading_category">New Added Books</p>
+</div>
 
-	<div class="container show_products_as_slick">
-		{% if new_added_books %}
-		{% for book in new_added_books %}
-		<div class="product_div">
-			<div class="product_image_div">
-				<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+<div class="container show_products_as_slick">
+	{% if new_added_books %}
+	{% for book in new_added_books %}
+	<div class="product_div">
+		<div class="product_image_div">
+			<a href="{% url 'bookncart_web:book_detail' book.id %}"><img src="{{ book.image_url.url }}" class="product_image_img" ></a>
+		</div>
+		<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
+		<div class="product_price">Rs. {{ book.price }}</div>
+		<div class="buttons_group">
+			<div class="button_cart">
+				<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
+				<span class="small_text_cart">ADD TO CART</span>
 			</div>
-			<div class="product_name"><a href="{% url 'bookncart_web:book_detail' book.id %}">{{ book.name }}</a></div>
-			<div class="product_price">Rs. {{ book.price }}</div>
-			<div class="buttons_group">
-				<div class="button_cart">
-					<span class="glyphicon glyphicon-shopping-cart glyphicon_product_css" ></span>
-					<span class="small_text_cart">ADD TO CART</span>
-				</div>
-				<div class="button_favourite">
-					<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
-				</div>
-				<div class="button_compare">
-					<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
-				</div>
+			<div class="button_favourite">
+				<span class="glyphicon glyphicon glyphicon-heart glyphicon_product_css_heart" ></span>
+			</div>
+			<div class="button_compare">
+				<span class="glyphicon glyphicon glyphicon-random glyphicon_product_css_compare" ></span>
 			</div>
 		</div>
-		{% endfor %}
-		{% endif %}
 	</div>
-	{% endblock content_block %}
+	{% endfor %}
+	{% endif %}
+</div>
+{% endblock content_block %}
 
-	{% block js_block %}
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="{% static 'bookncart_web/bootstrap/js/bootstrap.min.js' %}"></script>
-	<script type="text/javascript" src="{% static 'bookncart_web/js/loading.js' %}"></script>
-	<script type="text/javascript" src="{% static 'bookncart_web/slick/slick.min.js' %}"></script>
-	<script type="text/javascript" src="{% static 'bookncart_web/js/modernizr.js' %}"></script>
-	<script type="text/javascript" src="{% static 'bookncart_web/toastr/toastr.min.js' %}"></script>
+{% block js_block %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="{% static 'bookncart_web/bootstrap/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bookncart_web/js/loading.js' %}"></script>
+<script type="text/javascript" src="{% static 'bookncart_web/slick/slick.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bookncart_web/js/modernizr.js' %}"></script>
+<script type="text/javascript" src="{% static 'bookncart_web/toastr/toastr.min.js' %}"></script>
 
-	<script type="text/javascript" src="{% static 'bookncart_web/js/main.js' %}"></script>
-	<script src="https://apis.google.com/js/api:client.js"></script>
-	<script type="text/javascript">
-		toastr.options = {
-			"closeButton": true,
-			"debug": false,
-			"newestOnTop": false,
-			"progressBar": true,
-			"positionClass": "toast-bottom-center",
-			"preventDuplicates": false,
-			"onclick": null,
-			"showDuration": "300",
-			"hideDuration": "1000",
-			"timeOut": "1500",
-			"extendedTimeOut": "1500",
-			"showEasing": "swing",
-			"hideEasing": "linear",
-			"showMethod": "fadeIn",
-			"hideMethod": "fadeOut"
-		}
+<script type="text/javascript" src="{% static 'bookncart_web/js/main.js' %}"></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
+<script type="text/javascript">
+	toastr.options = {
+		"closeButton": true,
+		"debug": false,
+		"newestOnTop": false,
+		"progressBar": true,
+		"positionClass": "toast-bottom-center",
+		"preventDuplicates": false,
+		"onclick": null,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": "1500",
+		"extendedTimeOut": "1500",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
+	}
 
-		var googleUser = {};
-		var startApp = function() {
-			gapi.load('auth2', function(){
-				auth2 = gapi.auth2.init({
-					client_id: '509487250429-pekgqlshg58mfqm6adctmvm3ul9nlbjr.apps.googleusercontent.com',					
-				});
-				attachSignin(document.getElementById('google_login_button'));
+	var googleUser = {};
+	var startApp = function() {
+		gapi.load('auth2', function(){
+			auth2 = gapi.auth2.init({
+				client_id: '509487250429-pekgqlshg58mfqm6adctmvm3ul9nlbjr.apps.googleusercontent.com',					
 			});
-		};
+			attachSignin(document.getElementById('google_login_button'));
+		});
+	};
 
-		function attachSignin(element) {
-			auth2.attachClickHandler(element, {},
-				function(googleUser) {
-					var profile = googleUser.getBasicProfile();
-					console.log("ID: " + profile.getId());
-					console.log("Name: " + profile.getName());
-					console.log("Image URL: " + profile.getImageUrl());
-					console.log("Email: " + profile.getEmail());
+	function attachSignin(element) {
+		auth2.attachClickHandler(element, {},
+			function(googleUser) {
+				var profile = googleUser.getBasicProfile();
+				console.log("ID: " + profile.getId());
+				console.log("Name: " + profile.getName());
+				console.log("Image URL: " + profile.getImageUrl());
+				console.log("Email: " + profile.getEmail());
 
-					var id_token = googleUser.getAuthResponse().id_token;
-					console.log("ID Token: " + id_token);
-					populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
-				}, function(error) {
-					alert(JSON.stringify(error, undefined, 2));
-				});
-			auth2.then(function(){
-				checkIfLoggedInThroughGoogle();
-			}, function(error_reason){
-				alert('unable to initialise google login ' + error_reason);
-			});
-		}
-
-		function checkIfLoggedInThroughGoogle(){
-			if (auth2.isSignedIn.get()) {
-				var profile = auth2.currentUser.get().getBasicProfile();
-				console.log('ID: ' + profile.getId());
-				console.log('Name: ' + profile.getName() + " was logged in already");
-				console.log('Image URL: ' + profile.getImageUrl());
-				console.log('Email: ' + profile.getEmail());
+				var id_token = googleUser.getAuthResponse().id_token;
+				console.log("ID Token: " + id_token);
 				populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
-			}
-		}
+			}, function(error) {
+				alert(JSON.stringify(error, undefined, 2));
+			});
+		auth2.then(function(){
+			checkIfLoggedInThroughGoogle();
+		}, function(error_reason){
+			alert('unable to initialise google login ' + error_reason);
+		});
+	}
 
-		function populateDataInNavbarMyAccountItemWhenUserIsLoggedIn(){
+	function checkIfLoggedInThroughGoogle(){
+		if (auth2.isSignedIn.get()) {
 			var profile = auth2.currentUser.get().getBasicProfile();
-			$('.bs-example-modal-sm').modal('hide');
-			$("#my_account_nav_item").show();
-			$("#login_with_fb_and_google_navitem").hide();
-			toastr.info('Welcome ' + profile.getName() + '. You have been logged in successfully..Happy Shopping');
+			console.log('ID: ' + profile.getId());
+			console.log('Name: ' + profile.getName() + " was logged in already");
+			console.log('Image URL: ' + profile.getImageUrl());
+			console.log('Email: ' + profile.getEmail());
+			populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
 		}
+	}
 
-		$("#sign_out_user_nav").click(function(){
-			var auth2 = gapi.auth2.getAuthInstance();
-			if (auth2.isSignedIn.get()) {
-				auth2.signOut().then(function () {
-					console.log('User signed out.');
-					populateDataInNavbarMyAccountItemWhenUserIsLoggedOut();
-				});
+	function populateDataInNavbarMyAccountItemWhenUserIsLoggedIn(){
+		var profile = auth2.currentUser.get().getBasicProfile();
+		$('.bs-example-modal-sm').modal('hide');
+		$("#my_account_nav_item").show();
+		$("#login_with_fb_and_google_navitem").hide();
+		toastr.info('Welcome ' + profile.getName() + '. You have been logged in successfully..Happy Shopping');
+	}
+
+	$("#sign_out_user_nav").click(function(){
+		var auth2 = gapi.auth2.getAuthInstance();
+		if (auth2.isSignedIn.get()) {
+			auth2.signOut().then(function () {
+				console.log('User signed out.');
+				populateDataInNavbarMyAccountItemWhenUserIsLoggedOut();
+			});
+		}
+	});
+
+	function populateDataInNavbarMyAccountItemWhenUserIsLoggedOut(){
+		$("#my_account_nav_item").hide();
+		$("#login_with_fb_and_google_navitem").show();
+		toastr.info('You have been logged out successfully');
+	}
+
+	startApp();
+
+	function addToCartFunction(id){
+		$.ajax({
+			url : "add_to_cart/",
+			type : "POST",
+			data : { book_id : id },
+			success : function(response){
+				addBookInCartNavbar(response);	
+			},
+			error : function(xhr, errormsg ,err){
+				alert(xhr.responseText  + err + errormsg);
 			}
 		});
+	}
 
-		function populateDataInNavbarMyAccountItemWhenUserIsLoggedOut(){
-			$("#my_account_nav_item").hide();
-			$("#login_with_fb_and_google_navitem").show();
-			toastr.info('You have been logged out successfully');
+	function addBookInCartNavbar(response){
+		var new_html = '';
+		for(var i=0;i<response.cart_items.length;i++){
+			new_html += '<tr><td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="' + response.cart_items[i].image_url + '"></a></div></td><td><div class="name_of_book_table_row">' + response.cart_items[i].name + '</div></td><td>QTY ' + response.cart_items[i].quantity + '</td><td>Rs. ' + response.cart_items[i].amount + '</td><td><div class="cross_button_cart" onclick="removeFromCartFunction(' + response.cart_items[i].id + ')"><span class="glyphicon glyphicon-remove glyphicon_remove_large_cart"></span></div></td></tr><tr id="insert_after_block_for_navbar_cart_table"></tr>';
 		}
+		new_html += '<tr class=""><td></td><td colspan="2">Sub-Total</td><td colspan="2">Rs.' + response.subtotal + '</td></tr><tr class="success"><td></td><td colspan="2">Total</td><td colspan="2">Rs. ' + response.total + '</td></tr><tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>';
+		$("#cart_table_internal_html").html(new_html);
 
-		startApp();
-
-		function addToCartFunction(id){
-			$.ajax({
-				url : "add_to_cart/",
-				type : "POST",
-				data : { book_id : id },
-				success : function(response){
-					addBookInCartNavbar(response);	
-				},
-				error : function(xhr, errormsg ,err){
-					alert(xhr.responseText  + err + errormsg);
-				}
-			});
-		}
-
-		function addBookInCartNavbar(response){
-			var new_html = '';
-			for(var i=0;i<response.cart_items.length;i++){
-				new_html += '<tr><td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="' + response.cart_items[i].image_url + '"></a></div></td><td><div class="name_of_book_table_row">' + response.cart_items[i].name + '</div></td><td>QTY ' + response.cart_items[i].quantity + '</td><td>Rs. ' + response.cart_items[i].amount + '</td><td><div class="cross_button_cart" onclick="removeFromCartFunction(' + response.cart_items[i].id + ')"><span class="glyphicon glyphicon-remove glyphicon_remove_large_cart"></span></div></td></tr><tr id="insert_after_block_for_navbar_cart_table"></tr>';
+		if(response.error_message == null){
+			if(response.message_type == 'add'){
+				toastr.success('Successfully added book to cart');	
+			}else if(response.message_type == 'delete'){
+				toastr.success('Successfully deleted book from cart');	
 			}
-			new_html += '<tr class=""><td></td><td colspan="2">Sub-Total</td><td colspan="2">Rs.' + response.subtotal + '</td></tr><tr class="success"><td></td><td colspan="2">Total</td><td colspan="2">Rs. ' + response.total + '</td></tr><tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>';
-			$("#cart_table_internal_html").html(new_html);
+		}else{
+			toastr.error(response.error_message);
+		}
 
-			if(response.error_message == null){
-				if(response.message_type == 'add'){
-					toastr.success('Successfully added book to cart');	
-				}else if(response.message_type == 'delete'){
-					toastr.success('Successfully deleted book from cart');	
-				}
-			}else{
-				toastr.error(response.error_message);
+		$("#cart_count_navbar_text_innerhttml").html(response.quantity);
+	}
+
+	function removeFromCartFunction(id){
+		$.ajax({
+			url : "delete_from_cart/",
+			type : "POST",
+			data : { book_id : id },
+			success : function(response){
+				addBookInCartNavbar(response);	
+			},
+			error : function(xhr, errormsg ,err){
+				alert(xhr.responseText  + err + errormsg);
 			}
+		});
+	}
 
-			$("#cart_count_navbar_text_innerhttml").html(response.quantity);
-		}
-
-		function removeFromCartFunction(id){
-			$.ajax({
-				url : "delete_from_cart/",
-				type : "POST",
-				data : { book_id : id },
-				success : function(response){
-					addBookInCartNavbar(response);	
-				},
-				error : function(xhr, errormsg ,err){
-					alert(xhr.responseText  + err + errormsg);
-				}
-			});
-		}
-
-	</script>
-	{% endblock js_block %}
+</script>
+{% endblock js_block %}
 </body>
 </html>
