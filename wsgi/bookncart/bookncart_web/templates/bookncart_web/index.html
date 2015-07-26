@@ -175,16 +175,13 @@
 	<script type="text/javascript" src="{% static 'bookncart_web/js/main.js' %}"></script>
 	<script src="https://apis.google.com/js/api:client.js"></script>
 	<script type="text/javascript">
+		var facebook_email_permission_denied = false;
 		window.fbAsyncInit = function() {
 			FB.init({
 				appId      : '509658639190611',
 				cookie     : true,
 				xfbml      : true,
 				version    : 'v2.4'
-			});
-
-			FB.getLoginStatus(function(response) {
-				statusChangeCallback(response);
 			});
 		};
 
@@ -237,22 +234,23 @@
 					console.log("ID Token: " + id_token);
 					populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
 				}, function(error) {
-					alert(JSON.stringify(error, undefined, 2));
+					// alert(JSON.stringify(error, undefined, 2));
 				});
-			auth2.then(function(){
-				checkIfLoggedInThroughGoogle();
-			}, function(error_reason){
-				alert('unable to initialise google login ' + error_reason);
-			});
 		}
 
 		function statusChangeCallback(response) {
-			console.log('statusChangeCallback');
-			console.log(response);
 			if (response.status === 'connected') {
 				console.log('connected');
-				populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
-				testAPI();
+				FB.api('/me/permissions', function(responsePermissions){
+					if('declined' == responsePermissions.data[1].status){
+						facebook_email_permission_denied = true;
+						toastr.error('You need to accept email permission so that we can identify you on our server. Dont worry we will not be spamming you. Please login again.');
+					}else{
+						facebook_email_permission_denied = false;
+						populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
+						callViewForFacebookLogin(response);
+					}
+				});
 			} else if (response.status === 'not_authorized') {
 				console.log('Please log into this app.');
 			} else {
@@ -260,69 +258,94 @@
 			}
 		}
 
+		function callViewForFacebookLogin(response){
+			console.log(response);
+			var accessToken = response.authResponse.accessToken;
+			var expiresIn = response.authResponse.expiresIn;
+			var grantedScopes = response.authResponse.grantedScopes;
+			var signedRequest = response.authResponse.signedRequest;
+			var userID = response.authResponse.userID;
+			FB.api('/me', {fields: 'last_name,age_range,about,address,birthday,email,first_name,gender,hometown,link,location,middle_name,name,work,cover'}, function(response) {
+				var profileObject = JSON.stringify(response);
+				var email = response.email;
+				var first_name = response.first_name;
+				var middle_name = response.last_name;
+				var last_name = response.last_name;
+				var name = response.name;
+				FB.api('/me/picture?width=400&height=400', function(response){
+					var image_url = response.data.url;
+					$.ajax({
+						url : "facebook_login/",
+						type : "POST",
+						data : { access_token : accessToken,
+							expires_in : expiresIn,
+							granted_scopes : grantedScopes,
+							signed_request : signedRequest,
+							user_id : userID,
+							profile_object : profileObject,
+							email : email,
+							first_name : first_name,
+							middle_name : middle_name,
+							last_name : last_name,
+							name : name,
+							image_url : image_url
+						},
+						success : function(response){
+							window.location.reload(true);
+						},
+						error : function(xhr, errormsg ,err){
+							alert(xhr.responseText  + err + errormsg);
+						}
+					});
+				})
+			});
+		}
+
 		$("#fb_login_button").click(function(){
-			FB.login(function(response) {
-				statusChangeCallback(response);
-			}, {
-				scope: 'email', 
-				return_scopes: true
-			});
-		});
-
-		function testAPI() {
-			FB.api('/me', function(response) {
-				console.log('Successful login for: ' + response.name);
-				
-			});
-		}
-
-		function checkIfLoggedInThroughGoogle(){
-			if (auth2.isSignedIn.get()) {
-				var profile = auth2.currentUser.get().getBasicProfile();
-				console.log('ID: ' + profile.getId());
-				console.log('Name: ' + profile.getName() + " was logged in already");
-				console.log('Image URL: ' + profile.getImageUrl());
-				console.log('Email: ' + profile.getEmail());
-				populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
-			}
-		}
-
-		function populateDataInNavbarMyAccountItemWhenUserIsLoggedIn(){
-			var auth2 = gapi.auth2.getAuthInstance();
-			var name;
-			if(auth2.isSignedIn.get()){
-				var profile = auth2.currentUser.get().getBasicProfile();
-				name = profile.getName();
-				toastr.info('Welcome ' + name + '. You have been logged in successfully..Happy Shopping');
+			if(!facebook_email_permission_denied){
+				FB.login(function(response) {
+					statusChangeCallback(response);
+				}, {
+					scope: 'email', 
+					return_scopes: true
+				});
 			}else{
-				FB.api('/me', function(response) {
-					name =  response.name;
-					toastr.info('Welcome ' + name + '. You have been logged in successfully..Happy Shopping');
+				FB.login(function(response) {
+					statusChangeCallback(response);
+				}, {
+					scope: 'email', 
+					return_scopes: true,
+					auth_type: 'rerequest'
 				});
 			}
+		});
+
+		function populateDataInNavbarMyAccountItemWhenUserIsLoggedIn(){
 			$('.bs-example-modal-sm').modal('hide');
 			$("#my_account_nav_item").show();
 			$("#login_with_fb_and_google_navitem").hide();
+			$("#loading_indicator_div").fadeIn("slow");
+			toastr.info('Welcome, You have been logged in successfully. Redirecting..Please Wait');
 		}
 
 		$("#sign_out_user_nav").click(function(){
-			var auth2 = gapi.auth2.getAuthInstance();
-			if (auth2.isSignedIn.get()) {
-				auth2.signOut().then(function () {
-					console.log('User signed out.');
-					populateDataInNavbarMyAccountItemWhenUserIsLoggedOut();
-				});
-			}else{
-				FB.logout(function(response) {
-			        populateDataInNavbarMyAccountItemWhenUserIsLoggedOut();
-			    });
-			}
+			populateDataInNavbarMyAccountItemWhenUserIsLoggedOut();
+			$.ajax({
+				url : "sign_out/",
+				type : "POST",
+				success : function(response){
+					window.location.reload(true);
+				},
+				error : function(xhr, errormsg ,err){
+					alert(xhr.responseText  + err + errormsg);
+				}
+			});
 		});
 
 		function populateDataInNavbarMyAccountItemWhenUserIsLoggedOut(){
 			$("#my_account_nav_item").hide();
 			$("#login_with_fb_and_google_navitem").show();
-			toastr.info('You have been logged out successfully');
+			toastr.info('You have been logged out successfully. Redirecting..Please Wait');
 		}
 
 		startApp();

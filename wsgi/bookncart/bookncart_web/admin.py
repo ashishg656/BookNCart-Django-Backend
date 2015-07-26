@@ -11,7 +11,7 @@ admin.site.register(Address)
 admin.site.register(Location)
 admin.site.register(Orders)
 admin.site.register(Books_ordered)
-admin.site.register(Users)
+admin.site.register(UserProfiles)
 
 
 class CategoriesAdmin(admin.ModelAdmin):

@@ -1,12 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from PIL import Image
 from django.template import RequestContext
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.core import serializers
 import json
-
+import requests
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
 from bookncart_web.models import *
 
 
@@ -164,3 +166,92 @@ def view_for_requestcontext_data_common_view(request):
                'cart_subtotal': cart_subtotal,
                'cart_quantity': cart_quantity}
     return context
+
+
+@csrf_exempt
+def facebook_login(request):
+    if request.method == 'POST':
+        access_token = request.POST.get('access_token')
+        expires_in = request.POST.get('expires_in')
+        granted_scopes = request.POST.get('granted_scopes')
+        signed_request = request.POST.get('signed_request')
+        user_id = request.POST.get('user_id')
+        profile_object = request.POST.get('profile_object')
+        print(profile_object)
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        middle_name = request.POST.get('middle_name')
+        last_name = request.POST.get('last_name')
+        name = request.POST.get('name')
+        image_url = request.POST.get('image_url')
+        url = 'https://graph.facebook.com/v2.4/oauth/access_token?grant_type=fb_exchange_token'
+        url += '&client_id=509658639190611&client_secret=4201c4b846d3be4a17998568e5b9fe44&fb_exchange_token='
+        url += str(access_token)
+        access_token_request = requests.get(url)
+        long_live_access_token_fb = access_token_request.json()['access_token']
+        long_live_access_token_fb_expires_in = access_token_request.json()['expires_in']
+
+        username = str(email) + str(user_id)
+        password = user_id
+        if len(username) > 30:
+            username = username[0:29]
+
+        print(username)
+        print(password)
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            user_profile = UserProfiles.objects.get(user_link_obj=user)
+            user_profile.access_token = access_token
+            user_profile.long_live_access_token = long_live_access_token_fb
+            user_profile.access_token_expires_in = expires_in
+            user_profile.long_live_access_token_expires_in = long_live_access_token_fb_expires_in
+            user_profile.granted_scopes = str(granted_scopes)
+            user_profile.signed_request = signed_request
+            user_profile.profile_details_json_object = profile_object
+            user_profile.profile_image = image_url
+            user_profile.login_count += 1
+            user_profile.is_logged_in = True
+            user_profile.save()
+            login(request, user)
+        else:
+            user = User.objects.create_user(username, str(email), password)
+            if first_name is not None:
+                user.first_name = str(first_name)
+            if last_name is not None:
+                user.last_name = str(last_name)
+            user.save()
+            user_profile = UserProfiles(user_link_obj=user)
+            user_profile.full_name = name
+            user_profile.first_name = first_name
+            user_profile.middle_name = middle_name
+            user_profile.last_name = last_name
+            user_profile.email = email
+            user_profile.password = password
+            user_profile.username = username
+            user_profile.userIDAuth = user_id
+            user_profile.is_google_account = False
+            user_profile.access_token = access_token
+            user_profile.long_live_access_token = long_live_access_token_fb
+            user_profile.access_token_expires_in = expires_in
+            user_profile.long_live_access_token_expires_in = long_live_access_token_fb_expires_in
+            user_profile.granted_scopes = str(granted_scopes)
+            user_profile.signed_request = signed_request
+            user_profile.profile_details_json_object = profile_object
+            user_profile.profile_image = image_url
+            user_profile.login_count = 1
+            user_profile.is_logged_in = True
+            user_profile.save()
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+        return HttpResponse()
+
+
+@csrf_exempt
+def sign_out(request):
+    if request.user.is_authenticated():
+        user_profile = UserProfiles.objects.get(user_link_obj=request.user)
+        user_profile.is_logged_in = False
+        user_profile.save()
+    logout(request)
+    return HttpResponse()

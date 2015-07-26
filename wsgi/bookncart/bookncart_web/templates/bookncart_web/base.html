@@ -12,203 +12,205 @@
 
 	{% block navbar_block %}
 	<div id="navbar_pc" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header hidden-xs" id="navbar_pc_logo">
-                <a class="navbar-brand navitem" href="#">BookNcart</a>
-            </div>
-            <div>
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a class="navitem" href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
-                        <ul id="dropdown-menu" class="dropdown-menu multi-column columns-3">
-                            <div id="listContainer">           
-                                <ul id="expList">
-                                    {% for top_category_i in top_category %}
-                                    <li class="categories">{{ top_category_i.name }}
-                                    	<ul class="subcategories">
-                                           {% for sub_category_i in sub_category %}
-                                           {% if sub_category_i.parent_id.id == top_category_i.id %}
-                                           <li>{{ sub_category_i.name }}
-                                             <ul class="subsubcategories">
-                                                 {% for subsub_category_i in subsub_category %}
-                                                 {% if subsub_category_i.parent_id.id ==  sub_category_i.id %}
-                                                 <li><a href="#"><span class="semester">{{ subsub_category_i.name }}</span></a></li>
-                                                 {% endif %}
-                                                 {% endfor %}
-                                             </ul>
-                                         </li>
-                                         {% endif %}
-                                         {% endfor %}
-                                         {% endfor %}
-                                     </ul>
-                                 </li>
-                             </div>
-                         </ul>
-                     </li>
-
-                 </ul>
-                 <ul class="nav navbar-nav navbar-right">
-                    <li class="hidden-xs hidden-sm">
-                        <form class="navbar-form" id="navbar_search_form" role="search">
-                            <div class="input-group" id="navbar_search_input">
-                                <input type="text"  class="form-control" placeholder="Search Books" name="srch-term" id="srch-term">
-                                <div class="input-group-btn" >
-                                    <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </li>
-                    <li class="dropdown visible-xs-inline-block visible-sm-inline-block">
-                        <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <span class="nav_glyph glyphicon glyphicon-search"></span>
-                        </a>
-                        <ul class="dropdown-menu zero_margin_ul transparent_bg" role="menu">
-                            <li class="zero_margin_ul">
-                                <form class="navbar-form zero_margin_ul" id="navbar_search_form" role="search">
-                                    <div class="input-group" id="navbar_search_input">
-                                        <input type="text"  class="form-control" placeholder="Search Books" name="srch-term" id="srch-term">
-                                        <div class="input-group-btn" >
-                                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <span class="nav_glyph glyphicon glyphicon-heart"></span> 
-                            <span class="hidden-xs">Wishlist</span> 
-                            <span class="badge hidden-xs">15</span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <table class="table table-striped">
-                                    <tr>
-                                        <td><div class="wishlist_image_div_table"><a href="#"><img class="wishlist_image_book_table" src="books/original1.627540.1.jpg"></a></div></td>
-                                        <td><div class="name_of_book_table_row">Digital Signal Processing By Ramesh Babu..</div></td>
-                                        <td>Rs. 500</td>
-                                        <td><div class="cross_button_wishlist"><span class="glyphicon glyphicon-remove glyphicon_remove_large_wishlist"></span></div></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td colspan="3"><a href="#"><span class="glyphicon glyphicon-th-list"></span> View Wishlist</a></td>
-                                    </tr>
-                                </table>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <span class="nav_glyph glyphicon glyphicon-shopping-cart"></span>
-                            <span class="hidden-xs">Cart</span> 
-                            <span id="cart_count_navbar_text_innerhttml" class="badge hidden-xs">{{ cart_quantity }}</span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <table class="table table-striped" id="cart_table_internal_html">
-                                    {% for cart_item in cart_items %}
-                                    <tr>
-                                        <td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="{{ cart_item.image_url }}"></a></div></td>
-                                        <td><div class="name_of_book_table_row">{{ cart_item.name }}</div></td>
-                                        <td>QTY {{ cart_item.quantity }}</td>
-                                        <td>Rs. {{ cart_item.amount }}</td>
-                                        <td><div class="cross_button_cart" onclick="removeFromCartFunction({{ cart_item.id }})"><span class="glyphicon glyphicon-remove glyphicon_remove_large_cart"></span></div></td>
-                                    </tr>
-                                    <tr id="insert_after_block_for_navbar_cart_table"></tr>
-                                    {% endfor %}
-                                    <tr class="">
-                                        <td></td>
-                                        <td colspan="2">Sub-Total</td><td colspan="2">Rs. {{ cart_subtotal }}</td>
-                                    </tr>
-                                    <tr class="success">
-                                        <td></td>
-                                        <td colspan="2">Total</td><td colspan="2">Rs. {{ cart_total }}</td>
-                                    </tr>
-                                    <tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>
-                                </table>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="modal_parent_li" id="login_with_fb_and_google_navitem">
-                        <a data-toggle="modal" data-target=".bs-example-modal-sm" class="navitem" href="#" aria-expanded="false"><span class="nav_glyph glyphicon glyphicon-user"></span>
-                            <span class="hidden-xs">Login</span></a>
-                            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                                <div id="modal_window" class="modal-dialog modal-sm">
-                                    <div id="login_modal" class="modal-content">
-
-                                        <div class="visible_for_login">
-                                            <div class="modal-body modal_login_body">
-                                                <button type="button" id="fb_login_button" class="btn btn-primary btn-lg btn-block"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_fb.png' %}" alt="FB logo"> Connect With Facebook</span></button>
-                                                <p class="modal_p">or</p>
-                                                <button type="button" id="google_login_button" class="btn btn-danger btn-lg btn-block" style="margin-bottom:10px"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_google.png' %}" alt="FB logo"> Connect With Google+</span></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown" id="my_account_nav_item">
-	                        <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-	                            <span class="nav_glyph glyphicon glyphicon-user"></span>
-	                            <span class="hidden-xs">My Account</span>
-	                        </a>
-	                        <ul class="dropdown-menu" role="menu">
-	                           	<li><a href="#">My Account</a></li>
-					            <li><a href="#">Another action</a></li>
-					            <li role="separator" class="divider"></li>
-					            <li id="sign_out_user_nav"><a href="#">Sign Out</a></li>
-	                        </ul>                               
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        {% endblock navbar_block %}
-
-        {% block content_block %}
-        {% endblock content_block %}	
-
-        {% block footer_block %}
-        <footer class="my_footer">
-          <div class="container">
-             <div class="row">
-                <div class="col-sm-3">
-                   <h5 class="footer_heading">Information</h5>
-                   <ul class="list-unstyled">
-                      <li><a href="#">About Us</a></li>
-                      <li>Shipping</li>
-                      <li>Privacy Policy</li>
-                      <li>Terms &amp; Conditions</li>
-                  </ul>
-              </div>
-              <div class="col-sm-3">
-               <h5 class="footer_heading">Customer Service</h5>
-               <ul class="list-unstyled">
-                  <li>Contact Us</li>
-                  <li>Returns</li>
-                  <li>Site Map</li>
-              </ul>
-          </div>
-          <div class="col-sm-3">
-           <h5 class="footer_heading">Extras</h5>
-           <ul class="list-unstyled">
-              <li>Brands</li>
-              <li>Gift Vouchers</li>
-              <li>Affiliates</li>
-              <li>Specials</li>
-          </ul>
+    <div class="container-fluid">
+      <div class="navbar-header hidden-xs" id="navbar_pc_logo">
+        <a class="navbar-brand navitem" href="#">BookNcart</a>
       </div>
-      <div class="col-sm-3">
-       <h5 class="footer_heading">My Account</h5>
-       <ul class="list-unstyled">
-          <li>My Account</li>
-          <li>Order History</li>
-          <li>Wishlist</li>
-          <li>Newsletter</li>
-      </ul>
+      <div>
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a class="navitem" href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
+            <ul id="dropdown-menu" class="dropdown-menu multi-column columns-3">
+              <div id="listContainer">           
+                <ul id="expList">
+                  {% for top_category_i in top_category %}
+                  <li class="categories">{{ top_category_i.name }}
+                   <ul class="subcategories">
+                     {% for sub_category_i in sub_category %}
+                     {% if sub_category_i.parent_id.id == top_category_i.id %}
+                     <li>{{ sub_category_i.name }}
+                       <ul class="subsubcategories">
+                         {% for subsub_category_i in subsub_category %}
+                         {% if subsub_category_i.parent_id.id ==  sub_category_i.id %}
+                         <li><a href="#"><span class="semester">{{ subsub_category_i.name }}</span></a></li>
+                         {% endif %}
+                         {% endfor %}
+                       </ul>
+                     </li>
+                     {% endif %}
+                     {% endfor %}
+                     {% endfor %}
+                   </ul>
+                 </li>
+               </div>
+             </ul>
+           </li>
+
+         </ul>
+         <ul class="nav navbar-nav navbar-right">
+          <li class="hidden-xs hidden-sm">
+            <form class="navbar-form" id="navbar_search_form" role="search">
+              <div class="input-group" id="navbar_search_input">
+                <input type="text"  class="form-control" placeholder="Search Books" name="srch-term" id="srch-term">
+                <div class="input-group-btn" >
+                  <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+              </div>
+            </form>
+          </li>
+          <li class="dropdown visible-xs-inline-block visible-sm-inline-block">
+            <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <span class="nav_glyph glyphicon glyphicon-search"></span>
+            </a>
+            <ul class="dropdown-menu zero_margin_ul transparent_bg" role="menu">
+              <li class="zero_margin_ul">
+                <form class="navbar-form zero_margin_ul" id="navbar_search_form" role="search">
+                  <div class="input-group" id="navbar_search_input">
+                    <input type="text"  class="form-control" placeholder="Search Books" name="srch-term" id="srch-term">
+                    <div class="input-group-btn" >
+                      <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <span class="nav_glyph glyphicon glyphicon-heart"></span> 
+              <span class="hidden-xs">Wishlist</span> 
+              <span class="badge hidden-xs">15</span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <table class="table table-striped">
+                  <tr>
+                    <td><div class="wishlist_image_div_table"><a href="#"><img class="wishlist_image_book_table" src="books/original1.627540.1.jpg"></a></div></td>
+                    <td><div class="name_of_book_table_row">Digital Signal Processing By Ramesh Babu..</div></td>
+                    <td>Rs. 500</td>
+                    <td><div class="cross_button_wishlist"><span class="glyphicon glyphicon-remove glyphicon_remove_large_wishlist"></span></div></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td colspan="3"><a href="#"><span class="glyphicon glyphicon-th-list"></span> View Wishlist</a></td>
+                  </tr>
+                </table>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <span class="nav_glyph glyphicon glyphicon-shopping-cart"></span>
+              <span class="hidden-xs">Cart</span> 
+              <span id="cart_count_navbar_text_innerhttml" class="badge hidden-xs">{{ cart_quantity }}</span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li>
+                <table class="table table-striped" id="cart_table_internal_html">
+                  {% for cart_item in cart_items %}
+                  <tr>
+                    <td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="{{ cart_item.image_url }}"></a></div></td>
+                    <td><div class="name_of_book_table_row">{{ cart_item.name }}</div></td>
+                    <td>QTY {{ cart_item.quantity }}</td>
+                    <td>Rs. {{ cart_item.amount }}</td>
+                    <td><div class="cross_button_cart" onclick="removeFromCartFunction({{ cart_item.id }})"><span class="glyphicon glyphicon-remove glyphicon_remove_large_cart"></span></div></td>
+                  </tr>
+                  <tr id="insert_after_block_for_navbar_cart_table"></tr>
+                  {% endfor %}
+                  <tr class="">
+                    <td></td>
+                    <td colspan="2">Sub-Total</td><td colspan="2">Rs. {{ cart_subtotal }}</td>
+                  </tr>
+                  <tr class="success">
+                    <td></td>
+                    <td colspan="2">Total</td><td colspan="2">Rs. {{ cart_total }}</td>
+                  </tr>
+                  <tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>
+                </table>
+              </li>
+            </ul>
+          </li>
+          {% if user.is_authenticated %}
+          <li class="dropdown" id="my_account_nav_item">
+           <a href="#" class="navitem dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+             <span class="nav_glyph glyphicon glyphicon-user"></span>
+             <span class="hidden-xs">My Account</span>
+           </a>
+           <ul class="dropdown-menu" role="menu">
+             <li><a href="#">My Account</a></li>
+             <li><a href="#">Another action</a></li>
+             <li role="separator" class="divider"></li>
+             <li id="sign_out_user_nav"><a href="#">Sign Out</a></li>
+           </ul>                               
+         </li>
+         {% else %}
+         <li class="modal_parent_li" id="login_with_fb_and_google_navitem">
+          <a data-toggle="modal" data-target=".bs-example-modal-sm" class="navitem" href="#" aria-expanded="false"><span class="nav_glyph glyphicon glyphicon-user"></span>
+            <span class="hidden-xs">Login</span></a>
+            <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+              <div id="modal_window" class="modal-dialog modal-sm">
+                <div id="login_modal" class="modal-content">
+
+                  <div class="visible_for_login">
+                    <div class="modal-body modal_login_body">
+                      <button type="button" id="fb_login_button" class="btn btn-primary btn-lg btn-block"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_fb.png' %}" alt="FB logo"> Connect With Facebook</span></button>
+                      <p class="modal_p">or</p>
+                      <button type="button" id="google_login_button" class="btn btn-danger btn-lg btn-block" style="margin-bottom:10px"><span class="modal_button_text"><img src="{% static 'bookncart_web/img_site/ic_google.png' %}" alt="FB logo"> Connect With Google+</span></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
   </div>
+  {% endblock navbar_block %}
+
+  {% block content_block %}
+  {% endblock content_block %}	
+
+  {% block footer_block %}
+  <footer class="my_footer">
+    <div class="container">
+     <div class="row">
+      <div class="col-sm-3">
+       <h5 class="footer_heading">Information</h5>
+       <ul class="list-unstyled">
+        <li><a href="#">About Us</a></li>
+        <li>Shipping</li>
+        <li>Privacy Policy</li>
+        <li>Terms &amp; Conditions</li>
+      </ul>
+    </div>
+    <div class="col-sm-3">
+     <h5 class="footer_heading">Customer Service</h5>
+     <ul class="list-unstyled">
+      <li>Contact Us</li>
+      <li>Returns</li>
+      <li>Site Map</li>
+    </ul>
+  </div>
+  <div class="col-sm-3">
+   <h5 class="footer_heading">Extras</h5>
+   <ul class="list-unstyled">
+    <li>Brands</li>
+    <li>Gift Vouchers</li>
+    <li>Affiliates</li>
+    <li>Specials</li>
+  </ul>
+</div>
+<div class="col-sm-3">
+ <h5 class="footer_heading">My Account</h5>
+ <ul class="list-unstyled">
+  <li>My Account</li>
+  <li>Order History</li>
+  <li>Wishlist</li>
+  <li>Newsletter</li>
+</ul>
+</div>
 </div>
 <hr>
 <p>TheBookStore &copy; 2015</p>
