@@ -74,15 +74,19 @@ class Categories(models.Model):
 
 
 class Location(models.Model):
-    latitude = models.CharField(max_length=50)
-    longitude = models.CharField(max_length=50)
-    device_id = models.CharField(max_length=200)
+    latitude = models.CharField(max_length=50, null=True, blank=True)
+    longitude = models.CharField(max_length=50, null=True, blank=True)
+    device_id = models.CharField(max_length=200, null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     user_id = models.ForeignKey('UserProfiles', null=True, blank=True)
-
-    def __str__(self):
-        return self.time
+    http_get_host = models.CharField(max_length=255, null=True, blank=True)
+    http_host = models.CharField(max_length=255, null=True, blank=True)
+    http_referer = models.CharField(max_length=255, null=True, blank=True)
+    http_user_agent = models.CharField(max_length=255, null=True, blank=True)
+    remote_host = models.CharField(max_length=255, null=True, blank=True)
+    remote_addr = models.CharField(max_length=255, null=True, blank=True)
+    remote_user = models.CharField(max_length=255, null=True, blank=True)
 
 
 class Orders(models.Model):
@@ -154,7 +158,7 @@ class UserProfiles(models.Model):
     profile_image = models.TextField(null=True, blank=True)
     login_count = models.IntegerField(default=1)
     is_logged_in = models.BooleanField(default=False)
-    user_link_obj = models.OneToOneField(User,null=True)
+    user_link_obj = models.OneToOneField(User, null=True)
 
     def __str__(self):
         return self.username

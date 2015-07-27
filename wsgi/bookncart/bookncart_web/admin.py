@@ -11,7 +11,6 @@ admin.site.register(Address)
 admin.site.register(Location)
 admin.site.register(Orders)
 admin.site.register(Books_ordered)
-admin.site.register(UserProfiles)
 
 
 class CategoriesAdmin(admin.ModelAdmin):
@@ -26,8 +25,13 @@ admin.site.register(Categories, CategoriesAdmin)
 class BooksAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'mrp', 'price', 'stock', 'is_featured', 'view_count', 'sell_count', 'condition_is_old', 'edition')
-    list_filter = ['mrp', 'price', 'stock', 'is_featured', 'view_count', 'sell_count', 'condition_is_old','tags_id']
+    list_filter = ['mrp', 'price', 'stock', 'is_featured', 'view_count', 'sell_count', 'condition_is_old', 'tags_id']
     search_fields = ['name']
 
 
 admin.site.register(Books, BooksAdmin)
+
+class UserProfilesAdmin(admin.ModelAdmin):
+    readonly_fields = ('account_creation_date','last_login')
+
+admin.site.register(UserProfiles,UserProfilesAdmin)

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, Http404, JsonResponse
+from django.http import HttpResponse, HttpRequest, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
 from django.template import RequestContext
@@ -196,8 +196,7 @@ def facebook_login(request):
         if len(username) > 30:
             username = username[0:29]
 
-        print(username)
-        print(password)
+        user_profile = None
         user = authenticate(username=username, password=password)
         if user is not None:
             user_profile = UserProfiles.objects.get(user_link_obj=user)
@@ -244,6 +243,19 @@ def facebook_login(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+        if user_profile is not None:
+            location = Location(user_id=user_profile)
+            location.http_get_host = request.get_host()
+            location.http_host = request.META['HTTP_HOST']
+            location.http_referer = request.META['HTTP_REFERER']
+            location.http_user_agent = request.META['HTTP_USER_AGENT']
+            location.remote_host = request.META['REMOTE_ADDR']
+            location.remote_addr = request.META['REMOTE_HOST']
+            try:
+                location.remote_user = request.META['REMOTE_USER']
+            except:
+                pass
+            location.save()
         return HttpResponse()
 
 
