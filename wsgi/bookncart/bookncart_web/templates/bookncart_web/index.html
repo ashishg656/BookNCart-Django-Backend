@@ -225,70 +225,38 @@
 			auth2.attachClickHandler(element, {},
 				function(googleUser) {
 					var profile = googleUser.getBasicProfile();
-					console.log("ID: " + profile.getId());
-					console.log("Name: " + profile.getName());
-					console.log("Image URL: " + profile.getImageUrl());
-					console.log("Email: " + profile.getEmail());
 
+					var json_profile_object = JSON.stringify(googleUser);
 					var id_token = googleUser.getAuthResponse().id_token;
-					console.log("ID Token: " + id_token);
+					var google_id = profile.getId();
+					var name = profile.getName();
+					var image = profile.getImageUrl();
+					var email = profile.getEmail();
+					var expires_in = googleUser.getAuthResponse().expires_in;
+					var access_token;
+					var scope;
+
+					try{
+						access_token = googleUser['B']['access_token'];
+					}catch(err){}
+					try{
+						scope = googleUser['B']['scope'];
+					}catch(err){}
+
 					populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
-				}, function(error) {
-					// alert(JSON.stringify(error, undefined, 2));
-				});
-		}
-
-		function statusChangeCallback(response) {
-			if (response.status === 'connected') {
-				console.log('connected');
-				FB.api('/me/permissions', function(responsePermissions){
-					if('declined' == responsePermissions.data[1].status){
-						facebook_email_permission_denied = true;
-						toastr.error('You need to accept email permission so that we can identify you on our server. Dont worry we will not be spamming you. Please login again.');
-					}else{
-						facebook_email_permission_denied = false;
-						populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
-						callViewForFacebookLogin(response);
-					}
-				});
-			} else if (response.status === 'not_authorized') {
-				console.log('Please log into this app.');
-			} else {
-				console.log('Please log into facebook.');
-			}
-		}
-
-		function callViewForFacebookLogin(response){
-			console.log(response);
-			var accessToken = response.authResponse.accessToken;
-			var expiresIn = response.authResponse.expiresIn;
-			var grantedScopes = response.authResponse.grantedScopes;
-			var signedRequest = response.authResponse.signedRequest;
-			var userID = response.authResponse.userID;
-			FB.api('/me', {fields: 'last_name,age_range,about,address,birthday,email,first_name,gender,hometown,link,location,middle_name,name,work,cover'}, function(response) {
-				var profileObject = JSON.stringify(response);
-				var email = response.email;
-				var first_name = response.first_name;
-				var middle_name = response.last_name;
-				var last_name = response.last_name;
-				var name = response.name;
-				FB.api('/me/picture?width=400&height=400', function(response){
-					var image_url = response.data.url;
 					$.ajax({
-						url : "facebook_login/",
+						url : "google_login/",
 						type : "POST",
-						data : { access_token : accessToken,
-							expires_in : expiresIn,
-							granted_scopes : grantedScopes,
-							signed_request : signedRequest,
-							user_id : userID,
-							profile_object : profileObject,
-							email : email,
-							first_name : first_name,
-							middle_name : middle_name,
-							last_name : last_name,
+						data : { 
+							json_profile_object : json_profile_object,
+							id_token : id_token,
+							google_id : google_id,
 							name : name,
-							image_url : image_url
+							image : image,
+							email : email,
+							expires_in : expires_in,
+							access_token : access_token,
+							scope : scope
 						},
 						success : function(response){
 							window.location.reload(true);
@@ -297,42 +265,63 @@
 							alert(xhr.responseText  + err + errormsg);
 						}
 					});
-				})
-			});
-		}
+				}, function(error) {
+					// alert(JSON.stringify(error, undefined, 2));
+				});
+}
 
-		$("#fb_login_button").click(function(){
-			if(!facebook_email_permission_denied){
-				FB.login(function(response) {
-					statusChangeCallback(response);
-				}, {
-					scope: 'email', 
-					return_scopes: true
-				});
+function statusChangeCallback(response) {
+	if (response.status === 'connected') {
+		console.log('connected');
+		FB.api('/me/permissions', function(responsePermissions){
+			if('declined' == responsePermissions.data[1].status){
+				facebook_email_permission_denied = true;
+				toastr.error('You need to accept email permission so that we can identify you on our server. Dont worry we will not be spamming you. Please login again.');
 			}else{
-				FB.login(function(response) {
-					statusChangeCallback(response);
-				}, {
-					scope: 'email', 
-					return_scopes: true,
-					auth_type: 'rerequest'
-				});
+				facebook_email_permission_denied = false;
+				populateDataInNavbarMyAccountItemWhenUserIsLoggedIn();
+				callViewForFacebookLogin(response);
 			}
 		});
+	} else if (response.status === 'not_authorized') {
+		console.log('Please log into this app.');
+	} else {
+		console.log('Please log into facebook.');
+	}
+}
 
-		function populateDataInNavbarMyAccountItemWhenUserIsLoggedIn(){
-			$('.bs-example-modal-sm').modal('hide');
-			$("#my_account_nav_item").show();
-			$("#login_with_fb_and_google_navitem").hide();
-			$("#loading_indicator_div").fadeIn("slow");
-			toastr.info('Welcome, You have been logged in successfully. Redirecting..Please Wait');
-		}
-
-		$("#sign_out_user_nav").click(function(){
-			populateDataInNavbarMyAccountItemWhenUserIsLoggedOut();
+function callViewForFacebookLogin(response){
+	var accessToken = response.authResponse.accessToken;
+	var expiresIn = response.authResponse.expiresIn;
+	var grantedScopes = response.authResponse.grantedScopes;
+	var signedRequest = response.authResponse.signedRequest;
+	var userID = response.authResponse.userID;
+	FB.api('/me', {fields: 'last_name,age_range,about,address,birthday,email,first_name,gender,hometown,link,location,middle_name,name,work,cover'}, function(response) {
+		var profileObject = JSON.stringify(response);
+		var email = response.email;
+		var first_name = response.first_name;
+		var middle_name = response.last_name;
+		var last_name = response.last_name;
+		var name = response.name;
+		FB.api('/me/picture?width=400&height=400', function(response){
+			var image_url = response.data.url;
 			$.ajax({
-				url : "sign_out/",
+				url : "facebook_login/",
 				type : "POST",
+				data : { 
+					access_token : accessToken,
+					expires_in : expiresIn,
+					granted_scopes : grantedScopes,
+					signed_request : signedRequest,
+					user_id : userID,
+					profile_object : profileObject,
+					email : email,
+					first_name : first_name,
+					middle_name : middle_name,
+					last_name : last_name,
+					name : name,
+					image_url : image_url
+				},
 				success : function(response){
 					window.location.reload(true);
 				},
@@ -340,66 +329,109 @@
 					alert(xhr.responseText  + err + errormsg);
 				}
 			});
+		})
+	});
+}
+
+$("#fb_login_button").click(function(){
+	if(!facebook_email_permission_denied){
+		FB.login(function(response) {
+			statusChangeCallback(response);
+		}, {
+			scope: 'email', 
+			return_scopes: true
 		});
+	}else{
+		FB.login(function(response) {
+			statusChangeCallback(response);
+		}, {
+			scope: 'email', 
+			return_scopes: true,
+			auth_type: 'rerequest'
+		});
+	}
+});
 
-		function populateDataInNavbarMyAccountItemWhenUserIsLoggedOut(){
-			$("#my_account_nav_item").hide();
-			$("#login_with_fb_and_google_navitem").show();
-			toastr.info('You have been logged out successfully. Redirecting..Please Wait');
+function populateDataInNavbarMyAccountItemWhenUserIsLoggedIn(){
+	$('.bs-example-modal-sm').modal('hide');
+	$("#my_account_nav_item").show();
+	$("#login_with_fb_and_google_navitem").hide();
+	$("#loading_indicator_div").fadeIn("slow");
+	toastr.info('Welcome, You have been logged in successfully. Redirecting..Please Wait');
+}
+
+$("#sign_out_user_nav").click(function(){
+	populateDataInNavbarMyAccountItemWhenUserIsLoggedOut();
+	$.ajax({
+		url : "sign_out/",
+		type : "POST",
+		success : function(response){
+			window.location.reload(true);
+		},
+		error : function(xhr, errormsg ,err){
+			alert(xhr.responseText  + err + errormsg);
 		}
+	});
+});
 
-		startApp();
+function populateDataInNavbarMyAccountItemWhenUserIsLoggedOut(){
+	$("#my_account_nav_item").hide();
+	$("#login_with_fb_and_google_navitem").show();
+	toastr.info('You have been logged out successfully. Redirecting..Please Wait');
+}
 
-		function addToCartFunction(id){
-			$.ajax({
-				url : "add_to_cart/",
-				type : "POST",
-				data : { book_id : id },
-				success : function(response){
-					addBookInCartNavbar(response);	
-				},
-				error : function(xhr, errormsg ,err){
-					alert(xhr.responseText  + err + errormsg);
-				}
-			});
+startApp();
+
+function addToCartFunction(id){
+	$.ajax({
+		url : "add_to_cart/",
+		type : "POST",
+		data : { book_id : id },
+		success : function(response){
+			addBookInCartNavbar(response);	
+		},
+		error : function(xhr, errormsg ,err){
+			alert(xhr.responseText  + err + errormsg);
 		}
+	});
+}
 
-		function addBookInCartNavbar(response){
-			var new_html = '';
-			for(var i=0;i<response.cart_items.length;i++){
-				new_html += '<tr><td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="' + response.cart_items[i].image_url + '"></a></div></td><td><div class="name_of_book_table_row">' + response.cart_items[i].name + '</div></td><td>QTY ' + response.cart_items[i].quantity + '</td><td>Rs. ' + response.cart_items[i].amount + '</td><td><div class="cross_button_cart" onclick="removeFromCartFunction(' + response.cart_items[i].id + ')"><span class="glyphicon glyphicon-remove glyphicon_remove_large_cart"></span></div></td></tr><tr id="insert_after_block_for_navbar_cart_table"></tr>';
-			}
-			new_html += '<tr class=""><td></td><td colspan="2">Sub-Total</td><td colspan="2">Rs.' + response.subtotal + '</td></tr><tr class="success"><td></td><td colspan="2">Total</td><td colspan="2">Rs. ' + response.total + '</td></tr><tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>';
-			$("#cart_table_internal_html").html(new_html);
+function addBookInCartNavbar(response){
+	var new_html = '';
+	for(var i=0;i<response.cart_items.length;i++){
+		new_html += '<tr><td><div class="cart_image_div_table"><a href="#"><img class="cart_image_book_table" src="' + response.cart_items[i].image_url + '"></a></div></td><td><div class="name_of_book_table_row">' + response.cart_items[i].name + '</div></td><td>QTY ' + response.cart_items[i].quantity + '</td><td>Rs. ' + response.cart_items[i].amount + '</td><td><div class="cross_button_cart" onclick="removeFromCartFunction(' + response.cart_items[i].id + ')"><span class="glyphicon glyphicon-remove glyphicon_remove_large_cart"></span></div></td></tr><tr id="insert_after_block_for_navbar_cart_table"></tr>';
+	}
+	new_html += '<tr class=""><td></td><td colspan="2">Sub-Total</td><td colspan="2">Rs.' + response.subtotal + '</td></tr><tr class="success"><td></td><td colspan="2">Total</td><td colspan="2">Rs. ' + response.total + '</td></tr><tr><td></td><td colspan="4"><a href="#"><span class="glyphicon glyphicon-log-out"></span> Checkout</a></td></tr>';
+	$("#cart_table_internal_html").html(new_html);
 
-			if(response.error_message == null){
-				if(response.message_type == 'add'){
-					toastr.success('Successfully added book to cart');	
-				}else if(response.message_type == 'delete'){
-					toastr.success('Successfully deleted book from cart');	
-				}
-			}else{
-				toastr.error(response.error_message);
-			}
-
-			$("#cart_count_navbar_text_innerhttml").html(response.quantity);
+	if(response.error_message == null){
+		if(response.message_type == 'add'){
+			toastr.success('Successfully added book to cart');	
+		}else if(response.message_type == 'delete'){
+			toastr.success('Successfully deleted book from cart');	
 		}
+	}else{
+		toastr.error(response.error_message);
+	}
 
-		function removeFromCartFunction(id){
-			$.ajax({
-				url : "delete_from_cart/",
-				type : "POST",
-				data : { book_id : id },
-				success : function(response){
-					addBookInCartNavbar(response);	
-				},
-				error : function(xhr, errormsg ,err){
-					alert(xhr.responseText  + err + errormsg);
-				}
-			});
+	$("#cart_count_navbar_text_innerhttml").html(response.quantity);
+}
+
+function removeFromCartFunction(id){
+	$.ajax({
+		url : "delete_from_cart/",
+		type : "POST",
+		data : { book_id : id },
+		success : function(response){
+			addBookInCartNavbar(response);	
+		},
+		error : function(xhr, errormsg ,err){
+			alert(xhr.responseText  + err + errormsg);
 		}
+	});
+}
 
-	</script>
-	{% endblock js_block %}
+</script>
+{% endblock js_block %}
 </body>
 </html>

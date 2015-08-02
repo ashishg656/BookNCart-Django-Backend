@@ -79,7 +79,6 @@ class Location(models.Model):
     device_id = models.CharField(max_length=200, null=True, blank=True)
     time = models.DateTimeField(auto_now_add=True)
     ip_address = models.GenericIPAddressField(null=True, blank=True)
-    user_id = models.ForeignKey('UserProfiles', null=True, blank=True)
     http_get_host = models.CharField(max_length=255, null=True, blank=True)
     http_host = models.CharField(max_length=255, null=True, blank=True)
     http_referer = models.CharField(max_length=255, null=True, blank=True)
@@ -87,6 +86,7 @@ class Location(models.Model):
     remote_host = models.CharField(max_length=255, null=True, blank=True)
     remote_addr = models.CharField(max_length=255, null=True, blank=True)
     remote_user = models.CharField(max_length=255, null=True, blank=True)
+    user_id = models.ForeignKey('UserProfiles', null=True, blank=True)
 
 
 class Orders(models.Model):
@@ -150,9 +150,10 @@ class UserProfiles(models.Model):
     is_google_account = models.BooleanField(default=True)
     access_token = models.TextField(null=True, blank=True)
     long_live_access_token = models.TextField(null=True, blank=True)
+    google_id_token = models.TextField(null=True, blank=True)
     access_token_expires_in = models.CharField(max_length=200, null=True, blank=True)
     long_live_access_token_expires_in = models.CharField(max_length=200, null=True, blank=True)
-    granted_scopes = models.CharField(max_length=200, null=True, blank=True)
+    granted_scopes = models.TextField(null=True, blank=True)
     signed_request = models.CharField(max_length=200, null=True, blank=True)
     profile_details_json_object = models.TextField(null=True, blank=True)
     profile_image = models.TextField(null=True, blank=True)

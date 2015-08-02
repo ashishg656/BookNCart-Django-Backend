@@ -169,6 +169,79 @@ def view_for_requestcontext_data_common_view(request):
 
 
 @csrf_exempt
+def google_login(request):
+    if request.method == 'POST':
+        access_token = request.POST.get('access_token')
+        expires_in = request.POST.get('expires_in')
+        granted_scopes = request.POST.get('scope')
+        email = request.POST.get('email')
+        name = request.POST.get('name')
+        image_url = request.POST.get('image')
+        google_id_token = request.POST.get('id_token')
+        user_id = request.POST.get('google_id')
+        profile_object = request.POST.get('json_profile_object')
+
+        username = str(email) + str(user_id)
+        password = user_id
+        if len(username) > 30:
+            username = username[0:29]
+
+        user_profile = None
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            user_profile = UserProfiles.objects.get(user_link_obj=user)
+            user_profile.access_token = access_token
+            user_profile.access_token_expires_in = expires_in
+            user_profile.granted_scopes = str(granted_scopes)
+            user_profile.profile_details_json_object = profile_object
+            user_profile.profile_image = image_url
+            if google_id_token is not None:
+                user_profile.google_id_token = google_id_token
+            user_profile.login_count += 1
+            user_profile.is_logged_in = True
+            user_profile.save()
+            login(request, user)
+        else:
+            user = User.objects.create_user(username, str(email), password)
+            user.first_name = name
+            user.save()
+            user_profile = UserProfiles(user_link_obj=user)
+            user_profile.full_name = name
+            user_profile.first_name = name
+            user_profile.email = email
+            user_profile.password = password
+            user_profile.username = username
+            user_profile.userIDAuth = user_id
+            user_profile.is_google_account = True
+            user_profile.access_token = access_token
+            user_profile.access_token_expires_in = expires_in
+            user_profile.google_id_token = google_id_token
+            user_profile.granted_scopes = str(granted_scopes)
+            user_profile.profile_details_json_object = profile_object
+            user_profile.profile_image = image_url
+            user_profile.login_count = 1
+            user_profile.is_logged_in = True
+            user_profile.save()
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+        if user_profile is not None:
+            location = Location(user_id=user_profile)
+            location.http_get_host = request.get_host()
+            location.http_host = request.META['HTTP_HOST']
+            location.http_referer = request.META['HTTP_REFERER']
+            location.http_user_agent = request.META['HTTP_USER_AGENT']
+            location.remote_host = request.META['REMOTE_ADDR']
+            location.remote_addr = request.META['REMOTE_HOST']
+            try:
+                location.remote_user = request.META['REMOTE_USER']
+            except:
+                pass
+            location.save()
+        return HttpResponse()
+
+
+@csrf_exempt
 def facebook_login(request):
     if request.method == 'POST':
         access_token = request.POST.get('access_token')
