@@ -322,8 +322,11 @@ def facebook_login(request):
             location.http_host = request.META['HTTP_HOST']
             location.http_referer = request.META['HTTP_REFERER']
             location.http_user_agent = request.META['HTTP_USER_AGENT']
-            location.remote_host = request.META['REMOTE_ADDR']
-            location.remote_addr = request.META['REMOTE_HOST']
+            try:
+                location.remote_host = request.META['REMOTE_ADDR']
+                location.remote_addr = request.META['REMOTE_HOST']
+            except:
+                pass
             try:
                 location.remote_user = request.META['REMOTE_USER']
             except:
