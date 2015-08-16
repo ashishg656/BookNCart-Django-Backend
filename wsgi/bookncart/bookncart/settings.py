@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookncart_web',
+    'bookncart_app',
 )
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"

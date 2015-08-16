@@ -18,6 +18,12 @@ class Address(models.Model):
         return self.name
 
 
+class Banners(models.Model):
+    banner_image = models.ImageField(upload_to='banners', max_length=255)
+    active = models.BooleanField(default=True)
+    upload_date = models.DateTimeField(auto_now=True)
+
+
 class Books(models.Model):
     name = models.CharField(max_length=400)
     description = models.TextField()
@@ -41,6 +47,7 @@ class Books(models.Model):
     image_url = models.ImageField(upload_to='books_images/%Y/%m/%d/', max_length=255)
     categories_id = models.ManyToManyField('Categories')
     tags_id = models.ManyToManyField('Tags')
+    last_active_time = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -66,6 +73,8 @@ class Books_ordered(models.Model):
 class Categories(models.Model):
     parent_id = models.ForeignKey('self', null=True, blank=True)
     name = models.CharField(max_length=200)
+    image_url = models.ImageField(upload_to='categories_images', max_length=255, null=True, blank=True)
+    image_url_2 = models.ImageField(upload_to='categories_images', max_length=255, null=True, blank=True)
     is_root = models.BooleanField()
     is_last = models.BooleanField()
 

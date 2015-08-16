@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url('', include('bookncart_web.urls', namespace='bookncart_web')),
+    url(r'^app/', include('bookncart_app.urls', namespace='bookncart_app')),
     url(r'^admin/', include(admin.site.urls)),
 ]
 if settings.DEBUG:
