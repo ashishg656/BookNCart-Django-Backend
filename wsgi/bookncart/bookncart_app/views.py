@@ -149,7 +149,7 @@ def sample_request(request):
     #     intehe = request.POST.get('integer')
     #
     #     return JsonResponse({"booleans": booleans, "strings": strings, "integer": intehe})
-    data = json.loads(request.body)
+    data = json.loads(request.body.decode())
     try:
         booleans = data["boolean"]
         strings = data['string']
