@@ -68,6 +68,7 @@ def home_request_2(request):
                          'currently_active_books': currently_active_books, 'tags': tags})
 
 
+@csrf_exempt
 def login_request(request):
     if request.method == 'POST':
         access_token = request.POST.get('access_token')
@@ -138,3 +139,13 @@ def login_request(request):
             except:
                 pass
         return JsonResponse({"status": True})
+
+
+@csrf_exempt
+def sample_request(request):
+    if request.mwthod == 'POST':
+        booleans = request.POST.get('boolean')
+        strings = request.POST.get('string')
+        intehe = request.POST.get('integer')
+
+        return JsonResponse({"booleans": booleans, "strings": strings, "integer": intehe})
