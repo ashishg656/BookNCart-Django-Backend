@@ -143,7 +143,7 @@ def login_request(request):
 
 @csrf_exempt
 def sample_request(request):
-    if request.mwthod == 'POST':
+    if request.method == 'POST':
         booleans = request.POST.get('boolean')
         strings = request.POST.get('string')
         intehe = request.POST.get('integer')
