@@ -143,9 +143,18 @@ def login_request(request):
 
 @csrf_exempt
 def sample_request(request):
-    if request.method == 'POST':
-        booleans = request.POST.get('boolean')
-        strings = request.POST.get('string')
-        intehe = request.POST.get('integer')
+    # if request.method == 'POST':
+    #     booleans = request.POST.get('boolean')
+    #     strings = request.POST.get('string')
+    #     intehe = request.POST.get('integer')
+    #
+    #     return JsonResponse({"booleans": booleans, "strings": strings, "integer": intehe})
+    data = json.loads(request.body)
+    try:
+        booleans = data["boolean"]
+        strings = data['string']
+        intehe = data['int']
+    except:
+        pass
 
-        return JsonResponse({"booleans": booleans, "strings": strings, "integer": intehe})
+    return JsonResponse({"booleans": booleans, "strings": strings, "integer": intehe})
