@@ -83,6 +83,8 @@ def login_request(request):
         image_url = request.POST.get('image_url')
         is_google_login = request.POST.get('is_google_login', False)
 
+        is_google_login = parseBoolean(is_google_login)
+
         username = str(email) + str(user_id)
         password = user_id
         if len(username) > 30:
@@ -162,6 +164,6 @@ def sample_request(request):
 
 
 def parseBoolean(stringToParse):
-    if stringToParse == 'True' or stringToParse == "true" or stringToParse == 1:
+    if stringToParse == 'True' or stringToParse == "true" or stringToParse == 1 or stringToParse == True or stringToParse == 'TRUE':
         return True
     return False
