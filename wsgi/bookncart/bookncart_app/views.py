@@ -71,13 +71,17 @@ def home_request_2(request):
 @csrf_exempt
 def login_request(request):
     if request.method == 'POST':
+        status = False
+        user_id_to_send = None
+        user_profile_id_to_send = None
+
         access_token = request.POST.get('access_token')
         user_id = request.POST.get('user_id')
         profile_object = request.POST.get('additional_data')
         email = request.POST.get('email')
         name = request.POST.get('name')
         image_url = request.POST.get('image_url')
-        is_google_login = request.POST.get('is_google_login')
+        is_google_login = request.POST.get('is_google_login', False)
 
         username = str(email) + str(user_id)
         password = user_id
@@ -95,6 +99,9 @@ def login_request(request):
             user_profile.is_logged_in = True
             user_profile.save()
             login(request, user)
+            status = True
+            user_profile_id_to_send = user_profile.id
+            user_id_to_send = user.id
         else:
             user = User.objects.create_user(username, str(email), password)
             user.first_name = str(name)
@@ -119,6 +126,9 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                status = True
+                user_profile_id_to_send = user_profile.id
+                user_id_to_send = user.id
         if user_profile is not None:
             try:
                 location = Location(user_id=user_profile)
@@ -138,7 +148,7 @@ def login_request(request):
                 location.save()
             except:
                 pass
-        return JsonResponse({"status": True})
+        return JsonResponse({"status": status, "user_profile_id": user_profile_id_to_send, "user_id": user_id_to_send})
 
 
 @csrf_exempt
