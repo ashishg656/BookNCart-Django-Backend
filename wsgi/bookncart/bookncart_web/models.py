@@ -169,6 +169,7 @@ class UserProfiles(models.Model):
     login_count = models.IntegerField(default=1)
     is_logged_in = models.BooleanField(default=False)
     user_link_obj = models.OneToOneField(User, null=True)
+    device_id = models.TextField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.username
@@ -179,6 +180,7 @@ class User_cart(models.Model):
     date_added = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     user_id = models.ForeignKey(UserProfiles, null=True, blank=True)
+    device_id = models.TextField(max_length=200, null=True, blank=True)
     book_id = models.ForeignKey(Books)
 
 
@@ -186,4 +188,12 @@ class User_wishlist(models.Model):
     date_added = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     user_id = models.ForeignKey(UserProfiles)
+    book_id = models.ForeignKey(Books)
+
+
+class Recently_viewed_books(models.Model):
+    date_added = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    user_id = models.ForeignKey(UserProfiles, null=True, blank=True)
+    device_id = models.TextField(max_length=200, null=True, blank=True)
     book_id = models.ForeignKey(Books)

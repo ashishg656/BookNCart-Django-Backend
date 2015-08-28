@@ -12,6 +12,7 @@ admin.site.register(Location)
 admin.site.register(Orders)
 admin.site.register(Books_ordered)
 admin.site.register(Banners)
+admin.site.register(Recently_viewed_books)
 
 
 class CategoriesAdmin(admin.ModelAdmin):
@@ -32,7 +33,9 @@ class BooksAdmin(admin.ModelAdmin):
 
 admin.site.register(Books, BooksAdmin)
 
-class UserProfilesAdmin(admin.ModelAdmin):
-    readonly_fields = ('account_creation_date','last_login')
 
-admin.site.register(UserProfiles,UserProfilesAdmin)
+class UserProfilesAdmin(admin.ModelAdmin):
+    readonly_fields = ('account_creation_date', 'last_login')
+
+
+admin.site.register(UserProfiles, UserProfilesAdmin)
