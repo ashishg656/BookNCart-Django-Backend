@@ -72,8 +72,8 @@ def home_request_2(request):
     latest_books_model = Books.objects.filter(stock__gt=0).order_by('-upload_date')[:10]
     latest_books = []
     for book in latest_books_model:
+        is_favourite = False
         if user_profile_id is not None:
-            is_favourite = False
             try:
                 query = User_wishlist.objects.get(is_active=True, user_id_id__exact=int(user_profile_id),
                                                   book_id_id__exact=book.id)
@@ -87,8 +87,8 @@ def home_request_2(request):
     top_rated_books_model = Books.objects.filter(stock__gt=0).order_by('-view_count')[:10]
     top_rated_books = []
     for book in top_rated_books_model:
+        is_favourite = False
         if user_profile_id is not None:
-            is_favourite = False
             try:
                 query = User_wishlist.objects.get(is_active=True, user_id_id__exact=int(user_profile_id),
                                                   book_id_id__exact=book.id)
@@ -102,8 +102,8 @@ def home_request_2(request):
     currently_active_books_model = Books.objects.filter(stock__gt=0).order_by('-last_active_time')[:10]
     currently_active_books = []
     for book in currently_active_books_model:
+        is_favourite = False
         if user_profile_id is not None:
-            is_favourite = False
             try:
                 query = User_wishlist.objects.get(is_active=True, user_id_id__exact=int(user_profile_id),
                                                   book_id_id__exact=book.id)
