@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpRequest, Http404, JsonResponse
 from django.shortcuts import render, redirect
@@ -11,6 +12,58 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from bookncart_web.models import *
 from django.core import serializers
+
+# 0 - featured books
+# 1 - best selling books
+# 2 - latest books
+# 3 - top rated books
+# 4 - currently active books
+
+@csrf_exempt
+def commonly_popular_books(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    mode = request.POST.get("mode", 0)
+    mode = int(mode)
+    pagenumber = request.POST.get("pagenumber", 1)
+    pagesize = request.POST.get("pagesize", 10)
+
+    books_model_to_fetch = []
+
+    if mode == 0:
+        books_model_to_fetch = Books.objects.filter(stock__gt=0, is_featured__exact=1).order_by('-view_count')
+    elif mode == 1:
+        books_model_to_fetch = Books.objects.filter(stock__gt=0, ).order_by('-sell_count')
+    elif mode == 2:
+        books_model_to_fetch = Books.objects.filter(stock__gt=0).order_by('-upload_date')
+    elif mode == 3:
+        books_model_to_fetch = Books.objects.filter(stock__gt=0).order_by('-view_count')
+    elif mode == 4:
+        books_model_to_fetch = Books.objects.filter(stock__gt=0).order_by('-last_active_time')
+
+    books_paginated = Paginator(books_model_to_fetch, pagesize)
+    books_model_to_fetch = books_paginated.page(pagenumber)
+
+    books_array = []
+    for book in books_model_to_fetch:
+        is_favourite = False
+        if user_profile_id is not None:
+            try:
+                query = User_wishlist.objects.get(is_active=True, user_id_id__exact=int(user_profile_id),
+                                                  book_id_id__exact=book.id)
+                is_favourite = True
+            except:
+                is_favourite = False
+        books_array.append({'name': book.name, 'price': book.price, 'image_url': book.image_url.url, 'id': book.id,
+                            'is_favourite': is_favourite})
+
+    next_page = None
+    if books_model_to_fetch.has_next():
+        next_page = books_model_to_fetch.next_page_number()
+
+    return JsonResponse(
+        {'books': books_array, 'next_page': next_page})
 
 
 @csrf_exempt
@@ -130,8 +183,8 @@ def home_request_2(request):
         except:
             pass
     for book_recent in recently_viewed_books_model:
+        is_favourite = False
         if user_profile_id is not None:
-            is_favourite = False
             try:
                 query = User_wishlist.objects.get(is_active=True, user_id_id__exact=int(user_profile_id),
                                                   book_id_id__exact=book_recent.book_id.id)
