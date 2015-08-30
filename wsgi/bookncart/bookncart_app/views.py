@@ -76,6 +76,7 @@ def book_detail(request):
     book = get_object_or_404(Books, pk=int(book_id))
     book.view_count += 1
     book.save()
+
     related_books = []
     tags = book.tags_id.all()
     for tag in tags:
@@ -84,6 +85,10 @@ def book_detail(request):
             if temp_book.id != book.id and temp_book.stock > 0:
                 related_books.append(temp_book)
     related_books = set(related_books)
+    book_similar = []
+    for book in related_books:
+        book_similar.append({'name': book.name, 'price': book.price, 'image_url': book.image_url.url, 'id': book.id})
+
     number_of_reviews = Reviews.objects.filter(book_id__exact=int(book_id), is_approved=True).order_by(
         '-timestamp').count()
     number_of_likes = User_wishlist.objects.filter(book_id__exact=int(book_id), is_active=True).count()
@@ -101,7 +106,7 @@ def book_detail(request):
         {"image": book.image_url.url, 'name': book.name, 'description': book.description, 'author': book.author,
          'mrp': book.mrp, 'price': book.price, 'condition': book.condition_is_old,
          "number_of_reviews": number_of_reviews, 'number_of_likes': number_of_likes, 'is_favourite': is_favourite,
-         'book_id': book.id})
+         'book_id': book.id, 'related_books': book_similar})
 
 
 @csrf_exempt
