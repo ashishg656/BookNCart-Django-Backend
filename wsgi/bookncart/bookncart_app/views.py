@@ -67,6 +67,44 @@ def commonly_popular_books(request):
 
 
 @csrf_exempt
+def book_detail(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    book_id = request.POST.get('book_id')
+
+    book = get_object_or_404(Books, pk=int(book_id))
+    book.view_count += 1
+    book.save()
+    related_books = []
+    tags = book.tags_id.all()
+    for tag in tags:
+        temp_books = tag.books_set.all()
+        for temp_book in temp_books:
+            if temp_book.id != book.id and temp_book.stock > 0:
+                related_books.append(temp_book)
+    related_books = set(related_books)
+    number_of_reviews = Reviews.objects.filter(book_id__exact=int(book_id), is_approved=True).order_by(
+        '-timestamp').count()
+    number_of_likes = User_wishlist.objects.filter(book_id__exact=int(book_id), is_active=True).count()
+
+    is_favourite = False
+    if user_profile_id is not None:
+        try:
+            query = User_wishlist.objects.get(is_active=True, user_id_id__exact=int(user_profile_id),
+                                              book_id_id__exact=book.id)
+            is_favourite = True
+        except:
+            is_favourite = False
+
+    return JsonResponse(
+        {"image": book.image_url.url, 'name': book.name, 'description': book.description, 'author': book.author,
+         'mrp': book.mrp, 'price': book.price, 'condition': book.condition_is_old,
+         "number_of_reviews": number_of_reviews, 'number_of_likes': number_of_likes, 'is_favourite': is_favourite,
+         'book_id': book.id})
+
+
+@csrf_exempt
 def home_request_1(request):
     user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)
