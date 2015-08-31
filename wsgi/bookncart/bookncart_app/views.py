@@ -85,6 +85,7 @@ def book_detail(request):
             if temp_book.id != book.id and temp_book.stock > 0:
                 related_books.append(temp_book)
     related_books = set(related_books)
+    related_books = related_books[:20]
     book_similar = []
     for book in related_books:
         book_similar.append({'name': book.name, 'price': book.price, 'image_url': book.image_url.url, 'id': book.id})
@@ -107,6 +108,31 @@ def book_detail(request):
          'mrp': book.mrp, 'price': book.price, 'condition': book.condition_is_old,
          "number_of_reviews": number_of_reviews, 'number_of_likes': number_of_likes, 'is_favourite': is_favourite,
          'book_id': book.id, 'related_books': book_similar})
+
+
+@csrf_exempt
+def related_books_request(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    book_id = request.POST.get('book_id')
+
+    book = get_object_or_404(Books, pk=int(book_id))
+
+    related_books = []
+    tags = book.tags_id.all()
+    for tag in tags:
+        temp_books = tag.books_set.all()
+        for temp_book in temp_books:
+            if temp_book.id != book.id and temp_book.stock > 0:
+                related_books.append(temp_book)
+    related_books = set(related_books)
+    related_books = related_books[:20]
+    book_similar = []
+    for book in related_books:
+        book_similar.append({'name': book.name, 'price': book.price, 'image_url': book.image_url.url, 'id': book.id})
+
+    return JsonResponse({'similar_books': book_similar})
 
 
 @csrf_exempt

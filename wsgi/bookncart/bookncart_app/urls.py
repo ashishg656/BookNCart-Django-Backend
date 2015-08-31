@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^login_request/', views.login_request, name='login_request'),
     url(r'^commonly_popular_books', views.commonly_popular_books, name='commonly_popular_books'),
     url(r'^book_detail', views.book_detail, name='book_detail'),
+    url(r'^related_books_request', views.related_books_request, name='related_books_request'),
 ]
