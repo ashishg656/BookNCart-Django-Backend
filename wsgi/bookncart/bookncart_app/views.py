@@ -85,6 +85,7 @@ def book_detail(request):
             if temp_book.id != book.id and temp_book.stock > 0:
                 related_books.append(temp_book)
     related_books = set(related_books)
+    related_books = list(related_books)
     related_books = related_books[:20]
     book_similar = []
     for book in related_books:
@@ -127,6 +128,7 @@ def related_books_request(request):
             if temp_book.id != book.id and temp_book.stock > 0:
                 related_books.append(temp_book)
     related_books = set(related_books)
+    related_books = list(related_books)
     related_books = related_books[:20]
     book_similar = []
     for book in related_books:
