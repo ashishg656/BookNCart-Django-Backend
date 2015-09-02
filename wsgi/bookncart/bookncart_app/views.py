@@ -67,6 +67,25 @@ def commonly_popular_books(request):
 
 
 @csrf_exempt
+def categories_all_category(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+
+    main_categories = []
+    main_categories_model = Categories.objects.filter(is_root=False, is_last=False)
+    for category in main_categories_model:
+        sub_category = []
+        sub_category_model = Categories.objects.filter(parent_id=category.id)
+        for sub_cat in sub_category_model:
+            sub_category.append({'name': sub_cat.name, 'id': sub_cat.id, 'image_url': sub_cat.image_url.url})
+        main_categories.append({'name': category.name, 'id': category.id, 'image_url': category.image_url.url,
+                                'image_url_2': category.image_url_2.url, 'sub_categories': sub_category})
+
+    return JsonResponse({'main_categories': main_categories})
+
+
+@csrf_exempt
 def book_detail(request):
     user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)

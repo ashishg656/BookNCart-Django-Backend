@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^commonly_popular_books', views.commonly_popular_books, name='commonly_popular_books'),
     url(r'^book_detail', views.book_detail, name='book_detail'),
     url(r'^related_books_request', views.related_books_request, name='related_books_request'),
+    url(r'^categories_all_category', views.categories_all_category, name='categories_all_category'),
 ]
