@@ -26,6 +26,7 @@ def commonly_popular_books(request):
     device_id = request.POST.get('device_id', None)
     mode = request.POST.get("mode", 0)
     mode = int(mode)
+    category_id = request.POST.get('category_id', None)
     pagenumber = request.POST.get("pagenumber", 1)
     pagesize = request.POST.get("pagesize", 10)
 
@@ -41,6 +42,8 @@ def commonly_popular_books(request):
         books_model_to_fetch = Books.objects.filter(stock__gt=0).order_by('-view_count')
     elif mode == 4:
         books_model_to_fetch = Books.objects.filter(stock__gt=0).order_by('-last_active_time')
+    elif mode == 6:
+        books_model_to_fetch = Books.objects.filter(stock__gt=0, categories_id=category_id).order_by('-view_count')
 
     books_paginated = Paginator(books_model_to_fetch, pagesize)
     books_model_to_fetch = books_paginated.page(pagenumber)
