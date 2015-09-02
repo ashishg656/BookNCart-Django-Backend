@@ -110,8 +110,9 @@ def book_detail(request):
     related_books = list(related_books)
     related_books = related_books[:20]
     book_similar = []
-    for book in related_books:
-        book_similar.append({'name': book.name, 'price': book.price, 'image_url': book.image_url.url, 'id': book.id})
+    for book_temp in related_books:
+        book_similar.append({'name': book_temp.name, 'price': book_temp.price, 'image_url': book_temp.image_url.url,
+                             'id': book_temp.id})
 
     number_of_reviews = Reviews.objects.filter(book_id__exact=int(book_id), is_approved=True).order_by(
         '-timestamp').count()
