@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^related_books_request', views.related_books_request, name='related_books_request'),
     url(r'^categories_all_category', views.categories_all_category, name='categories_all_category'),
     url(r'^user_profile', views.user_profile, name='user_profile'),
+    url(r'^recently_viewed_books', views.recently_viewed_books, name='recently_viewed_books'),
 ]

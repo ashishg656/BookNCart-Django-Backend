@@ -70,6 +70,52 @@ def commonly_popular_books(request):
 
 
 @csrf_exempt
+def recently_viewed_books(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    pagenumber = request.POST.get("pagenumber", 1)
+    pagesize = request.POST.get("pagesize", 10)
+
+    books_model_to_fetch = []
+    if user_profile_id is not None:
+        try:
+            books_model_to_fetch = Recently_viewed_books.objects.filter(is_active=True, user_id_id__exact=int(
+                user_profile_id)).order_by('-date_added')
+        except:
+            pass
+    elif device_id is not None:
+        try:
+            books_model_to_fetch = Recently_viewed_books.objects.filter(is_active=True, device_id__exact=int(
+                device_id)).order_by('-date_added')
+        except:
+            pass
+
+    books_paginated = Paginator(books_model_to_fetch, pagesize)
+    books_model_to_fetch = books_paginated.page(pagenumber)
+
+    books_array = []
+    for book in books_model_to_fetch:
+        is_favourite = False
+        if user_profile_id is not None:
+            try:
+                query = User_wishlist.objects.get(is_active=True, user_id_id__exact=int(user_profile_id),
+                                                  book_id_id__exact=book.id)
+                is_favourite = True
+            except:
+                is_favourite = False
+        books_array.append({'name': book.name, 'price': book.price, 'image_url': book.image_url.url, 'id': book.id,
+                            'is_favourite': is_favourite})
+
+    next_page = None
+    if books_model_to_fetch.has_next():
+        next_page = books_model_to_fetch.next_page_number()
+
+    return JsonResponse(
+        {'books': books_array, 'next_page': next_page})
+
+
+@csrf_exempt
 def categories_all_category(request):
     user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)
@@ -124,6 +170,7 @@ def book_detail(request):
             recently_viewed_books = Recently_viewed_books.objects.get(user_id_id__exact=int(user_profile_id),
                                                                       book_id_id__exact=int(book.id))
             if recently_viewed_books.is_active == True:
+                recently_viewed_books.save()
                 pass
             else:
                 recently_viewed_books.is_active = True
@@ -138,6 +185,7 @@ def book_detail(request):
             recently_viewed_books = Recently_viewed_books.objects.get(device_id__exact=device_id,
                                                                       book_id_id__exact=int(book.id))
             if recently_viewed_books.is_active == True:
+                recently_viewed_books.save()
                 pass
             else:
                 recently_viewed_books.is_active = True
@@ -313,15 +361,14 @@ def home_request_2(request):
     recently_viewed_books = []
     if user_profile_id is not None:
         try:
-            recently_viewed_books_model = Recently_viewed_books.objects.filter(is_active=True,
-                                                                               user_id_id__exact=int(user_profile_id))[
-                                          :10]
+            recently_viewed_books_model = Recently_viewed_books.objects.filter(is_active=True, user_id_id__exact=int(
+                user_profile_id)).order_by('-date_added')[:10]
         except:
             pass
     elif device_id is not None:
         try:
-            recently_viewed_books_model = Recently_viewed_books.objects.filter(is_active=True,
-                                                                               device_id__exact=int(device_id))[:10]
+            recently_viewed_books_model = Recently_viewed_books.objects.filter(is_active=True, device_id__exact=int(
+                device_id)).order_by('-date_added')[:10]
         except:
             pass
     for book_recent in recently_viewed_books_model:
