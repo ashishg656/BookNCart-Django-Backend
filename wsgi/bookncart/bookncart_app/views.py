@@ -89,6 +89,26 @@ def categories_all_category(request):
 
 
 @csrf_exempt
+def user_profile(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+
+    user_profile = get_object_or_404(UserProfiles, pk=int(user_profile_id))
+
+    background_image_array = []
+    background_images = UserProfileBackgroundImages.objects.all()
+    for image in background_images:
+        background_image_array.append(
+            {'background_image_1': image.background_image_1.url, 'background_image_2': image.background_image_2.url})
+
+    return JsonResponse(
+        {'first_name': user_profile.first_name, 'full_name': user_profile.full_name, 'email': user_profile.email,
+         'mobile_number': user_profile.mobile_number, 'profile_image': user_profile.profile_image,
+         'background_images': background_image_array})
+
+
+@csrf_exempt
 def book_detail(request):
     user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)
@@ -316,7 +336,7 @@ def login_request(request):
         name = request.POST.get('name')
         image_url = request.POST.get('image_url')
         is_google_login = request.POST.get('is_google_login', False)
-        device_id = request.POST.get('device_id', "APP LOGIN WITHOUT DEVICE ID")
+        device_id = request.POST.get('device_id')
 
         is_google_login = parseBoolean(is_google_login)
 

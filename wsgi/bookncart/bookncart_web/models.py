@@ -175,6 +175,11 @@ class UserProfiles(models.Model):
         return self.username
 
 
+class UserProfileBackgroundImages(models.Model):
+    background_image_1 = models.ImageField(upload_to='user profile images', max_length=255)
+    background_image_2 = models.ImageField(upload_to='user profile images', max_length=255)
+
+
 class User_cart(models.Model):
     quantity = models.IntegerField()
     date_added = models.DateTimeField(auto_now=True)

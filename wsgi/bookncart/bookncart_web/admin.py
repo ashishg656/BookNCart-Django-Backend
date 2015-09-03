@@ -13,6 +13,7 @@ admin.site.register(Orders)
 admin.site.register(Books_ordered)
 admin.site.register(Banners)
 admin.site.register(Recently_viewed_books)
+admin.site.register(UserProfileBackgroundImages)
 
 
 class CategoriesAdmin(admin.ModelAdmin):
