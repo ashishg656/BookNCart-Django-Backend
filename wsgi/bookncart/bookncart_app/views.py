@@ -94,25 +94,29 @@ def recently_viewed_books(request):
     books_paginated = Paginator(books_model_to_fetch, pagesize)
     books_model_to_fetch = books_paginated.page(pagenumber)
 
-    books_array = []
-    for book in books_model_to_fetch:
+    recently_viewed_books = []
+    for book_recent in books_model_to_fetch:
         is_favourite = False
         if user_profile_id is not None:
             try:
                 query = User_wishlist.objects.get(is_active=True, user_id_id__exact=int(user_profile_id),
-                                                  book_id_id__exact=book.id)
+                                                  book_id_id__exact=book_recent.book_id.id)
                 is_favourite = True
             except:
-                is_favourite = False
-        books_array.append({'name': book.name, 'price': book.price, 'image_url': book.image_url.url, 'id': book.id,
-                            'is_favourite': is_favourite})
+                pass
+        if book_recent.book_id.stock > 0:
+            recently_viewed_books.append(
+                {'name': book_recent.book_id.name, 'price': book_recent.book_id.price,
+                 'image_url': book_recent.book_id.image_url.url,
+                 'id': book_recent.book_id.id,
+                 'is_favourite': is_favourite})
 
     next_page = None
     if books_model_to_fetch.has_next():
         next_page = books_model_to_fetch.next_page_number()
 
     return JsonResponse(
-        {'books': books_array, 'next_page': next_page})
+        {'books': recently_viewed_books, 'next_page': next_page})
 
 
 @csrf_exempt
