@@ -134,7 +134,18 @@ def book_detail(request):
             recent_viewed_book.user_id = user_profile
             recent_viewed_book.save()
     elif device_id is not None:
-        pass
+        try:
+            recently_viewed_books = Recently_viewed_books.objects.get(device_id__exact=device_id,
+                                                                      book_id_id__exact=int(book.id))
+            if recently_viewed_books.is_active == True:
+                pass
+            else:
+                recently_viewed_books.is_active = True
+                recently_viewed_books.save()
+        except:
+            recent_viewed_book = Recently_viewed_books(is_active=True, book_id=book)
+            recent_viewed_book.device_id = device_id
+            recent_viewed_book.save()
 
     related_books = []
     tags = book.tags_id.all()
