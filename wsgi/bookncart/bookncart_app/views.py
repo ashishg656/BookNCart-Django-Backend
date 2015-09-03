@@ -119,6 +119,23 @@ def book_detail(request):
     book.view_count += 1
     book.save()
 
+    if user_profile_id is not None:
+        try:
+            recently_viewed_books = Recently_viewed_books.objects.get(user_id_id__exact=int(user_profile_id),
+                                                                      book_id_id__exact=int(book.id))
+            if recently_viewed_books.is_active == True:
+                pass
+            else:
+                recently_viewed_books.is_active = True
+                recently_viewed_books.save()
+        except:
+            recent_viewed_book = Recently_viewed_books(is_active=True, book_id=book)
+            user_profile = UserProfiles.objects.get(pk=int(user_profile_id))
+            recent_viewed_book.user_id = user_profile
+            recent_viewed_book.save()
+    elif device_id is not None:
+        pass
+
     related_books = []
     tags = book.tags_id.all()
     for tag in tags:
@@ -293,7 +310,7 @@ def home_request_2(request):
     elif device_id is not None:
         try:
             recently_viewed_books_model = Recently_viewed_books.objects.filter(is_active=True,
-                                                                               device_id__exact=device_id)[:10]
+                                                                               device_id__exact=int(device_id))[:10]
         except:
             pass
     for book_recent in recently_viewed_books_model:
