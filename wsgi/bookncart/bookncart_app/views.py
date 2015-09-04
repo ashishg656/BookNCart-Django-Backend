@@ -70,6 +70,37 @@ def commonly_popular_books(request):
 
 
 @csrf_exempt
+def delete_recent_viewed_book(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    book_id = request.POST.get('book_id', None)
+
+    error = True
+
+    if user_profile_id is not None:
+        try:
+            book_model = Recently_viewed_books.objects.get(user_id_id__exact=int(user_profile_id),
+                                                           book_id_id__exact=int(book_id))
+            book_model.is_active = False
+            book_model.save()
+            error = False
+        except:
+            error = True
+    elif device_id is not None:
+        try:
+            book_model = Recently_viewed_books.objects.get(device_id__exact=int(device_id),
+                                                           book_id_id__exact=int(book_id))
+            book_model.is_active = False
+            book_model.save()
+            error = False
+        except:
+            error = True
+
+    return JsonResponse({'error': error})
+
+
+@csrf_exempt
 def recently_viewed_books(request):
     user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)
