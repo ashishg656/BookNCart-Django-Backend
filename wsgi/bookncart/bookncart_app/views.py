@@ -132,12 +132,12 @@ def view_wishlist_request(request):
 def autocomplete_search(request):
     word = request.POST.get('search', None)
 
-    query = Books.objects.filter(name__icontains=word)
+    query = Books.objects.filter(name__icontains=word).order_by('-view_count')
     results = []
     for book in query:
-        results.append({'name': book.name})
+        results.append({'name': book.name, 'id': book.id})
 
-    return JsonResponse({'results': results})
+    return JsonResponse({'books': results})
 
 
 @csrf_exempt
