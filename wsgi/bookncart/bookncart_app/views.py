@@ -84,7 +84,7 @@ def add_to_favourite(request):
     if user_profile_id is not None:
         try:
             wishlist_books_model = User_wishlist.objects.get(user_id_id__exact=int(user_profile_id),
-                                                             book_id_id__exact=int(book.id))
+                                                             book_id_id__exact=book.id)
             if wishlist_books_model.is_active == True:
                 wishlist_books_model.is_active = False
                 recently_viewed_books.save()
