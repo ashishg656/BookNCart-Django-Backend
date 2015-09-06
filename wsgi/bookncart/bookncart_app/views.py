@@ -87,12 +87,12 @@ def add_to_favourite(request):
                                                              book_id_id__exact=book.id)
             if wishlist_books_model.is_active == True:
                 wishlist_books_model.is_active = False
-                recently_viewed_books.save()
+                wishlist_books_model.save()
                 removedFromFavourites = True
                 error = False
             else:
-                recently_viewed_books.is_active = True
-                recently_viewed_books.save()
+                wishlist_books_model.is_active = True
+                wishlist_books_model.save()
                 error = False
         except:
             wishlist_books_model = User_wishlist(is_active=True, book_id=book)
