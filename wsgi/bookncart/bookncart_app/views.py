@@ -70,6 +70,41 @@ def commonly_popular_books(request):
 
 
 @csrf_exempt
+def add_to_favourite(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    book_id = request.POST.get('book_id')
+
+    book = get_object_or_404(Books, pk=int(book_id))
+
+    error = True
+    removedFromFavourites = False
+
+    if user_profile_id is not None:
+        try:
+            wishlist_books_model = User_wishlist.objects.get(user_id_id__exact=int(user_profile_id),
+                                                             book_id_id__exact=int(book.id))
+            if wishlist_books_model.is_active == True:
+                wishlist_books_model.is_active = False
+                recently_viewed_books.save()
+                removedFromFavourites = True
+                error = False
+            else:
+                recently_viewed_books.is_active = True
+                recently_viewed_books.save()
+                error = False
+        except:
+            wishlist_books_model = User_wishlist(is_active=True, book_id=book)
+            user_profile = UserProfiles.objects.get(pk=int(user_profile_id))
+            wishlist_books_model.user_id = user_profile
+            wishlist_books_model.save()
+            error = False
+
+    return JsonResponse({'error': error, 'removedFromFavourites': removedFromFavourites})
+
+
+@csrf_exempt
 def delete_recent_viewed_book(request):
     user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)
