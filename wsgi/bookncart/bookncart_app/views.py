@@ -105,6 +105,30 @@ def add_to_favourite(request):
 
 
 @csrf_exempt
+def view_wishlist_request(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+
+    books_model_to_fetch = []
+    if user_profile_id is not None:
+        try:
+            books_model_to_fetch = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
+                user_profile_id)).order_by('-date_added')
+        except:
+            pass
+
+    recently_viewed_books = []
+    for book_recent in books_model_to_fetch:
+        if book_recent.book_id.stock > 0:
+            recently_viewed_books.append({'name': book_recent.book_id.name, 'price': book_recent.book_id.price,
+                                          'image_url': book_recent.book_id.image_url.url,
+                                          'id': book_recent.book_id.id, 'author': book_recent.book_id.author})
+
+    return JsonResponse({'books': recently_viewed_books})
+
+
+@csrf_exempt
 def delete_recent_viewed_book(request):
     user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)
