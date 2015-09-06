@@ -408,8 +408,15 @@ def home_request_1(request):
             {'name': book.name, 'price': book.price, 'image_url': book.image_url.url, 'id': book.id,
              'is_favourite': is_favourite})
 
+    wishlist_count = 0
+    try:
+        wishlist_count = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
+            user_profile_id))
+    except:
+        wishlist_count = 0
+
     return JsonResponse({'banners': banners, 'categories': categories, 'featured_books': featured_books,
-                         'best_selling_books': best_selling_books})
+                         'best_selling_books': best_selling_books, 'wishlist_count': wishlist_count})
 
 
 @csrf_exempt
