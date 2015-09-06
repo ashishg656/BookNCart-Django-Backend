@@ -129,6 +129,18 @@ def view_wishlist_request(request):
 
 
 @csrf_exempt
+def autocomplete_search(request):
+    word = request.POST.get('search', None)
+
+    query = Books.objects.filter(name__icontains=word)
+    results = []
+    for book in query:
+        results.append({'name': book.name})
+
+    return JsonResponse({'results': results})
+
+
+@csrf_exempt
 def delete_recent_viewed_book(request):
     user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)

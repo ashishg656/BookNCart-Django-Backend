@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^delete_recent_viewed_book', views.delete_recent_viewed_book, name='delete_recent_viewed_book'),
     url(r'^add_to_favourite', views.add_to_favourite, name='add_to_favourite'),
     url(r'^view_wishlist_request', views.view_wishlist_request, name='view_wishlist_request'),
+    url(r'^autocomplete_search', views.autocomplete_search, name='autocomplete_search'),
 ]
