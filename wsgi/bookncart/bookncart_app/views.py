@@ -410,8 +410,9 @@ def home_request_1(request):
 
     wishlist_count = 0
     try:
-        wishlist_count = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
+        wishlist_count_model = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
             user_profile_id))
+        wishlist_count = wishlist_count_model.count()
     except:
         wishlist_count = 0
 
