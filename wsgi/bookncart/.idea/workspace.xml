@@ -21,11 +21,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bookncart_app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7380137">
-              <caret line="98" column="37" selection-start-line="98" selection-start-column="37" selection-end-line="98" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="72" column="20" selection-start-line="72" selection-start-column="4" selection-end-line="72" selection-end-column="20" />
               <folding>
                 <element signature="e#767#2809#0" expanded="false" />
                 <element signature="e#4234#5246#0" expanded="false" />
@@ -43,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bookncart_app/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="103" selection-start-line="14" selection-start-column="78" selection-end-line="14" selection-end-column="103" />
+            <state vertical-scroll-proportion="0.40753424">
+              <caret line="14" column="71" selection-start-line="14" selection-start-column="71" selection-end-line="14" selection-end-column="71" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -74,8 +74,8 @@
       <list>
         <option value="$PROJECT_DIR$/bookncart_web/admin.py" />
         <option value="$PROJECT_DIR$/bookncart_web/models.py" />
-        <option value="$PROJECT_DIR$/bookncart_app/urls.py" />
         <option value="$PROJECT_DIR$/bookncart_app/views.py" />
+        <option value="$PROJECT_DIR$/bookncart_app/urls.py" />
       </list>
     </option>
   </component>
@@ -596,16 +596,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bookncart_app/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="103" selection-start-line="14" selection-start-column="78" selection-end-line="14" selection-end-column="103" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bookncart_web/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -618,8 +608,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bookncart_app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7380137">
-          <caret line="98" column="37" selection-start-line="98" selection-start-column="37" selection-end-line="98" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="72" column="20" selection-start-line="72" selection-start-column="4" selection-end-line="72" selection-end-column="20" />
           <folding>
             <element signature="e#767#2809#0" expanded="false" />
             <element signature="e#4234#5246#0" expanded="false" />
@@ -632,6 +622,16 @@
             <element signature="e#15599#19546#0" expanded="false" />
             <element signature="e#19594#22394#0" expanded="false" />
             <element signature="e#22434#22599#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bookncart_app/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40753424">
+          <caret line="14" column="71" selection-start-line="14" selection-start-column="71" selection-end-line="14" selection-end-column="71" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>

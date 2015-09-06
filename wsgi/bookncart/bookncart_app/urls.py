@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^user_profile', views.user_profile, name='user_profile'),
     url(r'^recently_viewed_books', views.recently_viewed_books, name='recently_viewed_books'),
     url(r'^delete_recent_viewed_book', views.delete_recent_viewed_book, name='delete_recent_viewed_book'),
+    url(r'^add_to_favourite', views.add_to_favourite, name='add_to_favourite'),
 ]
