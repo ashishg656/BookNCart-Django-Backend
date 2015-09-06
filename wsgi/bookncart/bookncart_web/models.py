@@ -25,7 +25,7 @@ class Banners(models.Model):
 
 
 class Books(models.Model):
-    name = models.CharField(max_length=400)
+    name = models.CharField(max_length=400, db_index=True)
     description = models.TextField()
     author = models.CharField(max_length=200)
     publisher = models.CharField(max_length=200)
