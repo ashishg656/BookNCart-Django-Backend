@@ -18,6 +18,8 @@ from django.core import serializers
 # 2 - latest books
 # 3 - top rated books
 # 4 - currently active books
+# 6 - category
+# 7 - tags
 
 @csrf_exempt
 def commonly_popular_books(request):
@@ -29,6 +31,7 @@ def commonly_popular_books(request):
     category_id = request.POST.get('category_id', None)
     pagenumber = request.POST.get("pagenumber", 1)
     pagesize = request.POST.get("pagesize", 10)
+    tag_id = request.POST.get('tag_id', None)
 
     books_model_to_fetch = []
 
@@ -44,6 +47,8 @@ def commonly_popular_books(request):
         books_model_to_fetch = Books.objects.filter(stock__gt=0).order_by('-last_active_time')
     elif mode == 6:
         books_model_to_fetch = Books.objects.filter(stock__gt=0, categories_id=category_id).order_by('-view_count')
+    elif mode == 7:
+        books_model_to_fetch = Books.objects.filter(stock__gt=0, tags_id__exact=tag_id).order_by('-view_count')
 
     books_paginated = Paginator(books_model_to_fetch, pagesize)
     books_model_to_fetch = books_paginated.page(pagenumber)
