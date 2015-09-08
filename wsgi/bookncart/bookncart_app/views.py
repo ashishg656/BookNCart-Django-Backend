@@ -585,6 +585,18 @@ def login_request(request):
         return JsonResponse({"status": status, "user_profile_id": user_profile_id_to_send, "user_id": user_id_to_send})
 
 
+@csrf_exempt
+def logout(request):
+    status = False
+    if request.user.is_authenticated():
+        user_profile = UserProfiles.objects.get(user_link_obj=request.user)
+        user_profile.is_logged_in = False
+        user_profile.save()
+        logout(request)
+        status = True
+    return JsonResponse({'status': status})
+
+
 def parseBoolean(stringToParse):
     if stringToParse == 'True' or stringToParse == "true" or stringToParse == 1 or stringToParse == True or stringToParse == 'TRUE':
         return True
