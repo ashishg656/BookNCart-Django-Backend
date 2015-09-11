@@ -36,8 +36,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bookncart_app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7089041">
-              <caret line="660" column="22" selection-start-line="660" selection-start-column="22" selection-end-line="660" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.65068495">
+              <caret line="653" column="12" selection-start-line="653" selection-start-column="12" selection-end-line="653" selection-end-column="12" />
               <folding>
                 <element signature="e#793#3013#0" expanded="false" />
                 <element signature="e#6559#7483#0" expanded="false" />
@@ -51,7 +51,7 @@
                 <element signature="e#16931#19465#0" expanded="false" />
                 <element signature="e#19514#23461#0" expanded="false" />
                 <element signature="e#23509#26309#0" expanded="false" />
-                <element signature="e#27113#27278#0" expanded="false" />
+                <element signature="e#26742#26907#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -80,7 +80,7 @@
         <entry file="file://$PROJECT_DIR$/bookncart_app/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="17" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="17" />
+              <caret line="17" column="53" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -389,7 +389,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -448,7 +448,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -507,7 +507,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -566,7 +566,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -655,7 +655,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -697,7 +697,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -719,7 +719,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -761,7 +761,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -803,7 +803,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -845,7 +845,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -887,7 +887,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -929,7 +929,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -971,7 +971,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -997,16 +997,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.43664384">
           <caret line="15" column="47" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bookncart_app/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="17" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1037,10 +1027,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/bookncart_app/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="53" selection-start-line="17" selection-start-column="53" selection-end-line="17" selection-end-column="53" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bookncart_app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7089041">
-          <caret line="660" column="22" selection-start-line="660" selection-start-column="22" selection-end-line="660" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.65068495">
+          <caret line="653" column="12" selection-start-line="653" selection-start-column="12" selection-end-line="653" selection-end-column="12" />
           <folding>
             <element signature="e#793#3013#0" expanded="false" />
             <element signature="e#6559#7483#0" expanded="false" />
@@ -1054,7 +1054,7 @@
             <element signature="e#16931#19465#0" expanded="false" />
             <element signature="e#19514#23461#0" expanded="false" />
             <element signature="e#23509#26309#0" expanded="false" />
-            <element signature="e#27113#27278#0" expanded="false" />
+            <element signature="e#26742#26907#0" expanded="false" />
           </folding>
         </state>
       </provider>
