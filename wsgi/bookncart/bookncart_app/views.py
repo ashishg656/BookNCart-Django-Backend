@@ -81,6 +81,7 @@ def add_to_favourite(request):
     device_id = request.POST.get('device_id', None)
     book_id = request.POST.get('book_id')
     askForNumberOfLikesOnBook = request.POST.get('askForNumberOfLikesOnBook', False)
+    askForNumberOfLikesOnBook = parseBoolean(askForNumberOfLikesOnBook)
 
     book = get_object_or_404(Books, pk=int(book_id))
 
