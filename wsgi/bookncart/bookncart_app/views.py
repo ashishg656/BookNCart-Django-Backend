@@ -118,6 +118,51 @@ def add_to_favourite(request):
         {'error': error, 'removedFromFavourites': removedFromFavourites, 'wishlist_count': wishlist_count})
 
 
+# when cart request come,irrespective of whether user is logged in or not,we check first if the request for same book exist in database
+# if it exist and is_active, then increment the count of item
+# if it exist and not is_active, then make it active and initialise its count equal to quantity
+# if it do not exist, then create it with 'quantity'
+@csrf_exempt
+def add_to_cart(request):
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    book_id = request.POST.get('book_id')
+    quantity = request.POST.get('quantity')
+
+    if quantity is not None:
+        quantity = int(quantity)
+        if quantity > 10:
+            quantity = 10
+    book = get_object_or_404(Books, pk=int(book_id))
+
+    error = False
+    isAlreadyTen = False
+    errorMessage = None
+
+    if user_profile_id is not None:
+        try:
+            cart_books_model = User_cart.objects.get(user_id_id__exact=int(user_profile_id),
+                                                     book_id_id__exact=book.id)
+            if cart_books_model.is_active:
+                if cart_books_model.quantity < 10:
+                    if quantity is None:
+                        cart_books_model.quantity += 1
+                    else:
+                        cart_books_model.quantity = quantity
+                else:
+                    isAlreadyTen = True
+                    errorMessage = "Cannot add more than 10 items for this book"
+            else:
+                cart_books_model.is_active = True
+                if quantity is None:
+                    cart_books_model.quantity = 1
+                else:
+                    cart_books_model.quantity = quantity
+        except:
+            cart_instance = User_cart(is_active=True, book_id=book)
+
+
 @csrf_exempt
 def view_wishlist_request(request):
     user_id = request.POST.get('user_id', None)
@@ -597,21 +642,26 @@ def login_request(request):
 @csrf_exempt
 def logout(request):
     status = False
-    user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)
-    device_id = request.POST.get('device_id', None)
 
-    if request.user.is_authenticated():
-        user_profile = UserProfiles.objects.get(user_link_obj=request.user)
-        user_profile.is_logged_in = False
-        user_profile.save()
-        logout(request)
-        status = True
-    else:
-        user_profile = UserProfiles.objects.get(pk=int(user_profile_id))
-        user_profile.is_logged_in = False
-        user_profile.save()
-        status = True
+    # if request.user.is_authenticated():
+    #     user_profile = UserProfiles.objects.get(user_link_obj=request.user)
+    #     user_profile.is_logged_in = False
+    #     user_profile.save()
+    #     logout(request)
+    #     status = True
+    # else:
+    #     user_profile = UserProfiles.objects.get(pk=int(user_profile_id))
+    #     user_profile.is_logged_in = False
+    #     user_profile.save()
+    #     status = True
+
+    logout(request)
+    user_profile = UserProfiles.objects.get(pk=int(user_profile_id))
+    user_profile.is_logged_in = False
+    user_profile.save()
+    status = True
+
     return JsonResponse({'status': status})
 
 
