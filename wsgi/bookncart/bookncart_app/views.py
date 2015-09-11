@@ -80,6 +80,7 @@ def add_to_favourite(request):
     user_profile_id = request.POST.get('user_profile_id', None)
     device_id = request.POST.get('device_id', None)
     book_id = request.POST.get('book_id')
+    askForNumberOfLikesOnBook = request.POST.get('askForNumberOfLikesOnBook', False)
 
     book = get_object_or_404(Books, pk=int(book_id))
 
@@ -114,14 +115,15 @@ def add_to_favourite(request):
     except:
         wishlist_count = 0
 
+    numberOfLikesOnBook = None
+    if askForNumberOfLikesOnBook:
+        numberOfLikesOnBook = User_wishlist.objects.filter(book_id__exact=int(book_id), is_active=True).count()
+
     return JsonResponse(
-        {'error': error, 'removedFromFavourites': removedFromFavourites, 'wishlist_count': wishlist_count})
+        {'error': error, 'removedFromFavourites': removedFromFavourites, 'wishlist_count': wishlist_count,
+         'numberOfLikesOnBook': numberOfLikesOnBook})
 
 
-# when cart request come,irrespective of whether user is logged in or not,we check first if the request for same book exist in database
-# if it exist and is_active, then increment the count of item
-# if it exist and not is_active, then make it active and initialise its count equal to quantity
-# if it do not exist, then create it with 'quantity'
 @csrf_exempt
 def add_to_cart(request):
     user_id = request.POST.get('user_id', None)
