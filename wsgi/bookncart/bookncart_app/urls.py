@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^view_wishlist_request', views.view_wishlist_request, name='view_wishlist_request'),
     url(r'^autocomplete_search', views.autocomplete_search, name='autocomplete_search'),
     url(r'^logout_view', views.logout_view, name='logout_view'),
+    url(r'^add_to_cart', views.add_to_cart, name='add_to_cart'),
 ]

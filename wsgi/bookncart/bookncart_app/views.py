@@ -127,7 +127,6 @@ def add_to_favourite(request):
 
 @csrf_exempt
 def add_to_cart(request):
-    user_id = request.POST.get('user_id', None)
     user_profile_id = request.POST.get('user_profile_id', None)
     device_id = request.POST.get('device_id', None)
     book_id = request.POST.get('book_id')
@@ -148,14 +147,19 @@ def add_to_cart(request):
             cart_books_model = User_cart.objects.get(user_id_id__exact=int(user_profile_id),
                                                      book_id_id__exact=book.id)
             if cart_books_model.is_active:
-                if cart_books_model.quantity < 10:
-                    if quantity is None:
-                        cart_books_model.quantity += 1
-                    else:
-                        cart_books_model.quantity = quantity
+                if quantity is not None:
+                    cart_books_model.quantity = quantity
+                    cart_books_model.save()
                 else:
-                    isAlreadyTen = True
-                    errorMessage = "Cannot add more than 10 items for this book"
+                    if cart_books_model.quantity < 10:
+                        cart_books_model.quantity += 1
+                        cart_books_model.save()
+                    else:
+                        isAlreadyTen = True
+                        error = True
+                        errorMessage = "Sorry.Cannot add more than 10 items of the same book."
+                        cart_books_model.quantity = 10
+                        cart_books_model.save()
             else:
                 cart_books_model.is_active = True
                 if quantity is None:
@@ -164,6 +168,15 @@ def add_to_cart(request):
                     cart_books_model.quantity = quantity
         except:
             cart_instance = User_cart(is_active=True, book_id=book)
+            if quantity is None:
+                cart_instance.quantity = 1
+            else:
+                cart_instance.quantity = quantity
+            user_profile = get_object_or_404(UserProfiles, pk=int(user_profile_id))
+            cart_instance.user_id = user_profile
+            cart_instance.save()
+
+    return JsonResponse({'error': error, 'errorMessage': errorMessage, 'isAlreadyTen': isAlreadyTen})
 
 
 @csrf_exempt
