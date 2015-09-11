@@ -130,7 +130,7 @@ def add_to_cart(request):
     user_profile_id = request.POST.get('user_profile_id', None)
     device_id = request.POST.get('device_id', None)
     book_id = request.POST.get('book_id')
-    quantity = request.POST.get('quantity')
+    quantity = request.POST.get('quantity', None)
 
     if quantity is not None:
         quantity = int(quantity)
