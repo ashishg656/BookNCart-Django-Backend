@@ -597,6 +597,10 @@ def login_request(request):
 @csrf_exempt
 def logout(request):
     status = False
+    user_id = request.POST.get('user_id', None)
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+
     if request.user.is_authenticated():
         user_profile = UserProfiles.objects.get(user_link_obj=request.user)
         user_profile.is_logged_in = False
@@ -604,7 +608,7 @@ def logout(request):
         logout(request)
         status = True
     else:
-        user_profile = UserProfiles.objects.get(user_link_obj=request.user)
+        user_profile = UserProfiles.objects.get(pk=int(user_profile_id))
         user_profile.is_logged_in = False
         user_profile.save()
         status = True
