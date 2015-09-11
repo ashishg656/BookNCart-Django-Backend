@@ -603,6 +603,11 @@ def logout(request):
         user_profile.save()
         logout(request)
         status = True
+    else:
+        user_profile = UserProfiles.objects.get(user_link_obj=request.user)
+        user_profile.is_logged_in = False
+        user_profile.save()
+        status = True
     return JsonResponse({'status': status})
 
 
