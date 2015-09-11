@@ -106,7 +106,16 @@ def add_to_favourite(request):
             wishlist_books_model.save()
             error = False
 
-    return JsonResponse({'error': error, 'removedFromFavourites': removedFromFavourites})
+    wishlist_count = 0
+    try:
+        wishlist_count_model = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
+            user_profile_id))
+        wishlist_count = wishlist_count_model.count()
+    except:
+        wishlist_count = 0
+
+    return JsonResponse(
+        {'error': error, 'removedFromFavourites': removedFromFavourites, 'wishlist_count': wishlist_count})
 
 
 @csrf_exempt
