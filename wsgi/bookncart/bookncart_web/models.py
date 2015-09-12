@@ -3,13 +3,13 @@ from django.contrib.auth.models import User
 
 
 class Address(models.Model):
-    name = models.CharField(max_length=200)
-    address_line_1 = models.CharField(max_length=200)
-    address_line_2 = models.CharField(max_length=200)
-    city = models.CharField(max_length=200)
-    state = models.CharField(max_length=200)
-    pincode = models.CharField(max_length=10)
-    mobile_number = models.CharField(max_length=20)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    address_line_1 = models.CharField(max_length=200, null=True, blank=True)
+    address_line_2 = models.CharField(max_length=200, null=True, blank=True)
+    city = models.CharField(max_length=200, null=True, blank=True)
+    state = models.CharField(max_length=200, null=True, blank=True)
+    pincode = models.CharField(max_length=10, null=True, blank=True)
+    mobile_number = models.CharField(max_length=20, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     user_id = models.ForeignKey('UserProfiles')
