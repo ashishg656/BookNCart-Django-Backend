@@ -110,9 +110,8 @@ def add_to_favourite(request):
 
     wishlist_count = 0
     try:
-        wishlist_count_model = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
-            user_profile_id))
-        wishlist_count = wishlist_count_model.count()
+        wishlist_count = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
+            user_profile_id)).count()
     except:
         wishlist_count = 0
 
@@ -176,7 +175,111 @@ def add_to_cart(request):
             cart_instance.user_id = user_profile
             cart_instance.save()
 
+    elif device_id is not None:
+        try:
+            cart_books_model = User_cart.objects.get(device_id__exact=int(device_id),
+                                                     book_id_id__exact=book.id)
+            if cart_books_model.is_active:
+                if quantity is not None:
+                    cart_books_model.quantity = quantity
+                    cart_books_model.save()
+                else:
+                    if cart_books_model.quantity < 10:
+                        cart_books_model.quantity += 1
+                        cart_books_model.save()
+                    else:
+                        isAlreadyTen = True
+                        error = True
+                        errorMessage = "Sorry.Cannot add more than 10 items of the same book."
+                        cart_books_model.quantity = 10
+                        cart_books_model.save()
+            else:
+                cart_books_model.is_active = True
+                if quantity is None:
+                    cart_books_model.quantity = 1
+                else:
+                    cart_books_model.quantity = quantity
+        except:
+            cart_instance = User_cart(is_active=True, book_id=book)
+            if quantity is None:
+                cart_instance.quantity = 1
+            else:
+                cart_instance.quantity = quantity
+            cart_instance.device_id = device_id
+            cart_instance.save()
+
     return JsonResponse({'error': error, 'errorMessage': errorMessage, 'isAlreadyTen': isAlreadyTen})
+
+
+@csrf_exempt
+def remove_from_cart(request):
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    book_id = request.POST.get('book_id')
+
+    error = False
+    errorMessage = None
+
+    if user_profile_id is not None:
+        try:
+            cart_books_model = User_cart.objects.get(user_id_id__exact=int(user_profile_id),
+                                                     book_id_id__exact=int(book_id))
+            if cart_books_model.is_active:
+                cart_books_model.is_active = False
+                cart_books_model.save()
+            else:
+                error = True
+                errorMessage = "Book is already deleted from cart"
+        except:
+            error = True
+            errorMessage = "Book not found in cart"
+
+    elif device_id is not None:
+        try:
+            cart_books_model = User_cart.objects.get(device_id__exact=int(device_id),
+                                                     book_id_id__exact=int(book_id))
+            if cart_books_model.is_active:
+                cart_books_model.is_active = False
+                cart_books_model.save()
+            else:
+                error = True
+                errorMessage = "Book is already deleted from cart"
+        except:
+            error = True
+            errorMessage = "Book not found in cart"
+
+    return JsonResponse({'error': error, 'errorMessage': errorMessage})
+
+
+@csrf_exempt
+def view_cart_request(request):
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+
+    books_model_to_fetch = []
+    if user_profile_id is not None:
+        try:
+            books_model_to_fetch = User_cart.objects.filter(is_active=True, user_id_id__exact=int(
+                user_profile_id)).order_by('-date_added')
+        except:
+            pass
+    elif device_id is not None:
+        try:
+            books_model_to_fetch = User_cart.objects.filter(is_active=True, device_id__exact=int(device_id)).order_by(
+                '-date_added')
+        except:
+            pass
+
+    recently_viewed_books = []
+    for book_recent in books_model_to_fetch:
+        if book_recent.book_id.stock > 0:
+            recently_viewed_books.append({'name': book_recent.book_id.name, 'price': book_recent.book_id.price,
+                                          'image_url': book_recent.book_id.image_url.url,
+                                          'id': book_recent.book_id.id, 'author': book_recent.book_id.author,
+                                          'condition': book_recent.book_id.condition_is_old,
+                                          'quantity': book_recent.quantity})
+
+    return JsonResponse({'books': recently_viewed_books})
 
 
 @csrf_exempt
@@ -201,6 +304,46 @@ def view_wishlist_request(request):
                                           'id': book_recent.book_id.id, 'author': book_recent.book_id.author})
 
     return JsonResponse({'books': recently_viewed_books})
+
+
+@csrf_exempt
+def add_or_edit_address(request):
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+    name = request.POST.get('name')
+    address_line_1 = request.POST.get('address_line_1')
+    address_line_2 = request.POST.get('address_line_2')
+    city = request.POST.get('city')
+    state = request.POST.get('state')
+    pincode = request.POST.get('pincode')
+    mobile_number = request.POST.get('mobile_number')
+    address_id = request.POST.get('address_id', None)
+
+    error = False
+
+    address = None
+    if address_id is None:
+        address = Address(name=name, address_line_1=address_line_1, address_line_2=address_line_2, city=city,
+                          state=state, pincode=pincode, mobile_number=mobile_number, is_active=True,
+                          device_id=device_id)
+        user_profile = UserProfiles.objects.get(pk=int(user_profile_id))
+        address.user_id = user_profile
+        address.save()
+    else:
+        try:
+            address = Address.objects.get(pk=int(address_id))
+            address.name = name
+            address.address_line_1 = address_line_1
+            address.address_line_2 = address_line_2
+            address.city = city
+            address.state = state
+            address.pincode = pincode
+            address.mobile_number = mobile_number
+            address.device_id = device_id
+            address.save()
+        except:
+            error = True
+    return JsonResponse({'error': error, 'id': address.id})
 
 
 @csrf_exempt
@@ -485,14 +628,27 @@ def home_request_1(request):
 
     wishlist_count = 0
     try:
-        wishlist_count_model = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
-            user_profile_id))
-        wishlist_count = wishlist_count_model.count()
+        wishlist_count = User_wishlist.objects.filter(is_active=True, user_id_id__exact=int(
+            user_profile_id)).count()
     except:
         wishlist_count = 0
 
+    cart_count = 0
+    if user_profile_id is not None:
+        try:
+            cart_count = User_cart.objects.filter(is_active=True, user_id_id__exact=int(
+                user_profile_id)).count()
+        except:
+            cart_count = 0
+    elif device_id is not None:
+        try:
+            cart_count = User_cart.objects.filter(is_active=True, device_id__exact=int(device_id)).count()
+        except:
+            cart_count = 0
+
     return JsonResponse({'banners': banners, 'categories': categories, 'featured_books': featured_books,
-                         'best_selling_books': best_selling_books, 'wishlist_count': wishlist_count})
+                         'best_selling_books': best_selling_books, 'wishlist_count': wishlist_count,
+                         'cart_count': cart_count})
 
 
 @csrf_exempt

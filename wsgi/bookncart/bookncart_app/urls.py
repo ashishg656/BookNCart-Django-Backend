@@ -18,4 +18,7 @@ urlpatterns = [
     url(r'^autocomplete_search', views.autocomplete_search, name='autocomplete_search'),
     url(r'^logout_view', views.logout_view, name='logout_view'),
     url(r'^add_to_cart', views.add_to_cart, name='add_to_cart'),
+    url(r'^remove_from_cart', views.remove_from_cart, name='remove_from_cart'),
+    url(r'^view_cart_request', views.view_cart_request, name='view_cart_request'),
+    url(r'^add_or_edit_address', views.add_or_edit_address, name='add_or_edit_address'),
 ]
