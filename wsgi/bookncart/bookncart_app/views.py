@@ -354,6 +354,30 @@ def add_or_edit_address(request):
 
 
 @csrf_exempt
+def view_reviews(request):
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+
+    bookid = request.POST.get('bookid')
+
+    reviews = []
+    reviews_model = Reviews.objects.filter(is_approved=True, book_id=int(bookid)).order_by('-timestamp')
+    for review in reviews_model:
+        if review.is_by_registered_user:
+            try:
+                reviews.append(
+                    {'name': review.user_id.full_name, 'image': review.user_id.profile_image, 'rating': review.rating,
+                     'timestamp': review.timestamp, 'review': review.comment})
+            except:
+                pass
+        else:
+            reviews.append(
+                {'name': review.name, 'rating': review.rating, 'timestamp': review.timestamp, 'review': review.comment})
+
+    return JsonResponse({'reviews': reviews})
+
+
+@csrf_exempt
 def add_review(request):
     user_profile_id = request.POST.get('user_profile_id', None)
     device_id = request.POST.get('device_id', None)
@@ -372,7 +396,8 @@ def add_review(request):
             review_obj = Reviews(comment=review, rating=int(rating), is_approved=False, name=name, email=email,
                                  device_id=device_id)
         else:
-            review_obj = Reviews(comment=review, rating=int(rating), is_approved=False, device_id=device_id)
+            review_obj = Reviews(comment=review, rating=int(rating), is_approved=False, device_id=device_id,
+                                 is_by_registered_user=True)
             review_obj.user_id = get_object_or_404(UserProfiles, pk=int(user_profile_id))
     except:
         error = True
