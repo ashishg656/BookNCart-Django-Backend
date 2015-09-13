@@ -132,7 +132,7 @@ class Reviews(models.Model):
     user_id = models.ForeignKey('UserProfiles', null=True, blank=True)
     book_id = models.ForeignKey(Books)
     timestamp = models.DateTimeField(auto_now_add=True)
-    device_id = models.CharField(max_length=255)
+    device_id = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.comment
