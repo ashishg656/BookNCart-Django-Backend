@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^remove_from_cart', views.remove_from_cart, name='remove_from_cart'),
     url(r'^view_cart_request', views.view_cart_request, name='view_cart_request'),
     url(r'^add_or_edit_address', views.add_or_edit_address, name='add_or_edit_address'),
+    url(r'^add_review', views.add_review, name='add_review'),
 ]

@@ -140,6 +140,7 @@ def add_to_cart(request):
     error = False
     isAlreadyTen = False
     errorMessage = None
+    cart_count = 0
 
     if user_profile_id is not None:
         try:
@@ -174,6 +175,7 @@ def add_to_cart(request):
             user_profile = get_object_or_404(UserProfiles, pk=int(user_profile_id))
             cart_instance.user_id = user_profile
             cart_instance.save()
+        cart_count = User_cart.objects.filter(is_active=True, user_id_id__exact=int(user_profile_id)).count()
 
     elif device_id is not None:
         try:
@@ -207,8 +209,10 @@ def add_to_cart(request):
                 cart_instance.quantity = quantity
             cart_instance.device_id = device_id
             cart_instance.save()
+        cart_count = User_cart.objects.filter(is_active=True, device_id__exact=int(device_id)).count()
 
-    return JsonResponse({'error': error, 'errorMessage': errorMessage, 'isAlreadyTen': isAlreadyTen})
+    return JsonResponse(
+        {'error': error, 'errorMessage': errorMessage, 'isAlreadyTen': isAlreadyTen, 'cart_count': cart_count})
 
 
 @csrf_exempt
@@ -219,6 +223,7 @@ def remove_from_cart(request):
 
     error = False
     errorMessage = None
+    cart_count = 0
 
     if user_profile_id is not None:
         try:
@@ -233,6 +238,7 @@ def remove_from_cart(request):
         except:
             error = True
             errorMessage = "Book not found in cart"
+        cart_count = User_cart.objects.filter(is_active=True, user_id_id__exact=int(user_profile_id)).count()
 
     elif device_id is not None:
         try:
@@ -247,8 +253,9 @@ def remove_from_cart(request):
         except:
             error = True
             errorMessage = "Book not found in cart"
+        cart_count = User_cart.objects.filter(is_active=True, device_id__exact=int(device_id)).count()
 
-    return JsonResponse({'error': error, 'errorMessage': errorMessage})
+    return JsonResponse({'error': error, 'errorMessage': errorMessage, 'cart_count': cart_count})
 
 
 @csrf_exempt
@@ -344,6 +351,36 @@ def add_or_edit_address(request):
         except:
             error = True
     return JsonResponse({'error': error, 'id': address.id})
+
+
+@csrf_exempt
+def add_review(request):
+    user_profile_id = request.POST.get('user_profile_id', None)
+    device_id = request.POST.get('device_id', None)
+
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    review = request.POST.get('review')
+    bookid = request.POST.get('bookid')
+    rating = request.POST.get('rating')
+
+    error = False
+
+    try:
+        review_obj = None
+        if user_profile_id is None:
+            review_obj = Reviews(comment=review, rating=int(rating), is_approved=False, name=name, email=email,
+                                 device_id=device_id)
+        else:
+            review_obj = Reviews(comment=review, rating=int(rating), is_approved=False, device_id=device_id)
+            review_obj.user_id = get_object_or_404(UserProfiles, pk=int(user_profile_id))
+    except:
+        error = True
+
+    review_obj.book_id = get_object_or_404(Books, pk=int(bookid))
+    review_obj.save()
+
+    return JsonResponse({'error': error, })
 
 
 @csrf_exempt
