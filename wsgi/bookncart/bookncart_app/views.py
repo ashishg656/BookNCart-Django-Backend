@@ -277,6 +277,11 @@ def view_cart_request(request):
         except:
             pass
 
+    total_quantity = 0
+    cart_total = 0
+    delivery_charge = 0
+    total_amount = 0
+
     recently_viewed_books = []
     for book_recent in books_model_to_fetch:
         if book_recent.book_id.stock > 0:
@@ -285,8 +290,17 @@ def view_cart_request(request):
                                           'id': book_recent.book_id.id, 'author': book_recent.book_id.author,
                                           'condition': book_recent.book_id.condition_is_old,
                                           'quantity': book_recent.quantity})
+            total_quantity += 1
+            cart_total += (book_recent.book_id.price * book_recent.quantity)
 
-    return JsonResponse({'books': recently_viewed_books})
+    if cart_total > 1000:
+        delivery_charge = 0
+    else:
+        delivery_charge = 50
+    total_amount = cart_total + delivery_charge
+
+    return JsonResponse({'books': recently_viewed_books, 'total_quantity': total_quantity, 'cart_total': cart_total,
+                         'delivery_charge': delivery_charge, 'total_amount': total_amount})
 
 
 @csrf_exempt
