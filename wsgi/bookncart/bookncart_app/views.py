@@ -21,6 +21,10 @@ from django.core import serializers
 # 6 - category
 # 7 - tags
 
+delivery_charge_normal_constant = 50
+delivery_free_minimum_constant = 1000
+
+
 @csrf_exempt
 def commonly_popular_books(request):
     user_id = request.POST.get('user_id', None)
@@ -142,10 +146,13 @@ def add_to_cart(request):
     errorMessage = None
     cart_count = 0
 
+    books_model_to_fetch = []
     if user_profile_id is not None:
         try:
             cart_books_model = User_cart.objects.get(user_id_id__exact=int(user_profile_id),
                                                      book_id_id__exact=book.id)
+            books_model_to_fetch = User_cart.objects.filter(is_active=True, user_id_id__exact=int(
+                user_profile_id))
             if cart_books_model.is_active:
                 if quantity is not None:
                     cart_books_model.quantity = quantity
@@ -181,6 +188,7 @@ def add_to_cart(request):
         try:
             cart_books_model = User_cart.objects.get(device_id__exact=int(device_id),
                                                      book_id_id__exact=book.id)
+            books_model_to_fetch = User_cart.objects.filter(is_active=True, device_id__exact=int(device_id))
             if cart_books_model.is_active:
                 if quantity is not None:
                     cart_books_model.quantity = quantity
@@ -211,8 +219,24 @@ def add_to_cart(request):
             cart_instance.save()
         cart_count = User_cart.objects.filter(is_active=True, device_id__exact=int(device_id)).count()
 
+    total_quantity = 0
+    cart_total = 0
+
+    for book_recent in books_model_to_fetch:
+        if book_recent.book_id.stock > 0:
+            total_quantity += 1
+            cart_total += (book_recent.book_id.price * book_recent.quantity)
+
+    if cart_total > delivery_free_minimum_constant:
+        delivery_charge = 0
+    else:
+        delivery_charge = delivery_charge_normal_constant
+    total_amount = cart_total + delivery_charge
+
     return JsonResponse(
-        {'error': error, 'errorMessage': errorMessage, 'isAlreadyTen': isAlreadyTen, 'cart_count': cart_count})
+        {'error': error, 'errorMessage': errorMessage, 'isAlreadyTen': isAlreadyTen, 'cart_count': cart_count,
+         'total_quantity': total_quantity, 'cart_total': cart_total, 'delivery_charge': delivery_charge,
+         'total_amount': total_amount})
 
 
 @csrf_exempt
@@ -225,10 +249,13 @@ def remove_from_cart(request):
     errorMessage = None
     cart_count = 0
 
+    books_model_to_fetch = []
     if user_profile_id is not None:
         try:
             cart_books_model = User_cart.objects.get(user_id_id__exact=int(user_profile_id),
                                                      book_id_id__exact=int(book_id))
+            books_model_to_fetch = User_cart.objects.filter(is_active=True, user_id_id__exact=int(
+                user_profile_id))
             if cart_books_model.is_active:
                 cart_books_model.is_active = False
                 cart_books_model.save()
@@ -244,6 +271,7 @@ def remove_from_cart(request):
         try:
             cart_books_model = User_cart.objects.get(device_id__exact=int(device_id),
                                                      book_id_id__exact=int(book_id))
+            books_model_to_fetch = User_cart.objects.filter(is_active=True, device_id__exact=int(device_id))
             if cart_books_model.is_active:
                 cart_books_model.is_active = False
                 cart_books_model.save()
@@ -255,7 +283,23 @@ def remove_from_cart(request):
             errorMessage = "Book not found in cart"
         cart_count = User_cart.objects.filter(is_active=True, device_id__exact=int(device_id)).count()
 
-    return JsonResponse({'error': error, 'errorMessage': errorMessage, 'cart_count': cart_count})
+    total_quantity = 0
+    cart_total = 0
+
+    for book_recent in books_model_to_fetch:
+        if book_recent.book_id.stock > 0:
+            total_quantity += 1
+            cart_total += (book_recent.book_id.price * book_recent.quantity)
+
+    if cart_total > delivery_free_minimum_constant:
+        delivery_charge = 0
+    else:
+        delivery_charge = delivery_charge_normal_constant
+    total_amount = cart_total + delivery_charge
+
+    return JsonResponse(
+        {'error': error, 'errorMessage': errorMessage, 'cart_count': cart_count, 'total_quantity': total_quantity,
+         'cart_total': cart_total, 'delivery_charge': delivery_charge, 'total_amount': total_amount})
 
 
 @csrf_exempt
@@ -279,8 +323,6 @@ def view_cart_request(request):
 
     total_quantity = 0
     cart_total = 0
-    delivery_charge = 0
-    total_amount = 0
 
     recently_viewed_books = []
     for book_recent in books_model_to_fetch:
@@ -293,10 +335,10 @@ def view_cart_request(request):
             total_quantity += 1
             cart_total += (book_recent.book_id.price * book_recent.quantity)
 
-    if cart_total > 1000:
+    if cart_total > delivery_free_minimum_constant:
         delivery_charge = 0
     else:
-        delivery_charge = 50
+        delivery_charge = delivery_charge_normal_constant
     total_amount = cart_total + delivery_charge
 
     return JsonResponse({'books': recently_viewed_books, 'total_quantity': total_quantity, 'cart_total': cart_total,
