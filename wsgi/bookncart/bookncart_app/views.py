@@ -173,6 +173,7 @@ def add_to_cart(request):
                     cart_books_model.quantity = 1
                 else:
                     cart_books_model.quantity = quantity
+                cart_books_model.save()
         except:
             cart_instance = User_cart(is_active=True, book_id=book)
             if quantity is None:
@@ -209,6 +210,7 @@ def add_to_cart(request):
                     cart_books_model.quantity = 1
                 else:
                     cart_books_model.quantity = quantity
+                cart_books_model.save()
         except:
             cart_instance = User_cart(is_active=True, book_id=book)
             if quantity is None:
