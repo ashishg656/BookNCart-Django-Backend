@@ -671,7 +671,9 @@ def book_detail(request):
         {"image": book.image_url.url, 'name': book.name, 'description': book.description, 'author': book.author,
          'mrp': book.mrp, 'price': book.price, 'condition': book.condition_is_old,
          "number_of_reviews": number_of_reviews, 'number_of_likes': number_of_likes, 'is_favourite': is_favourite,
-         'book_id': book.id, 'related_books': book_similar})
+         'book_id': book.id, 'related_books': book_similar, 'publisher': book.publisher, 'isbn': book.isbn,
+         'binding': book.binding, 'edition': book.edition, 'language': book.language,
+         'number_of_pages': book.number_of_pages, 'publication_year': book.publication_year})
 
 
 @csrf_exempt
