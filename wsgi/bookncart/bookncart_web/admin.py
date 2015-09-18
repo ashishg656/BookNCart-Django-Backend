@@ -1,4 +1,3 @@
-from mailbox import Babyl
 from django.contrib import admin
 
 from .models import *

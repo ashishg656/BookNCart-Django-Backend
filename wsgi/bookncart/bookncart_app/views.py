@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpRequest, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from PIL import Image
 from django.template import RequestContext
+from django.template.context_processors import request
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.core import serializers
 import json
@@ -12,6 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from bookncart_web.models import *
 from django.core import serializers
+from push_notifications.models import GCMDevice
 
 # 0 - featured books
 # 1 - best selling books
@@ -879,6 +881,7 @@ def login_request(request):
         image_url = request.POST.get('image_url')
         is_google_login = request.POST.get('is_google_login', False)
         device_id = request.POST.get('device_id')
+        gcm_token = request.POST.get('gcm_token')
 
         is_google_login = parseBoolean(is_google_login)
 
@@ -924,6 +927,10 @@ def login_request(request):
             user_profile.login_count = 1
             user_profile.is_logged_in = True
             user_profile.save()
+            # gcm work
+            gcm_device_model = GCMDevice(name=name, user=user, device_id=device_id, registration_id=gcm_token)
+            gcm_device_model.save()
+            # end gcm work
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)

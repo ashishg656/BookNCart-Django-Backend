@@ -39,7 +39,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'bookncart_web',
     'bookncart_app',
+    'push_notifications',
 )
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+    "GCM_API_KEY": "AIzaSyDAFrn1t1VA7H3LIGDBbJ-Is-9ocdhiNHA",
+}
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
@@ -117,7 +122,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
 
-MEDIA_ROOT = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),'media')
+MEDIA_ROOT = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''), 'media')
 MEDIA_URL = '/media/'
 
 LOGGING = {
