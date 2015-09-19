@@ -901,6 +901,14 @@ def login_request(request):
             user_profile.is_logged_in = True
             user_profile.device_id = device_id
             user_profile.save()
+            #  gcm work
+            try:
+                gcm_model = GCMDevice.objects.get(user=user)
+                gcm_model.registration_id = gcm_token
+                gcm_model.save()
+            except:
+                pass
+            # end gcm work
             login(request, user)
             status = True
             user_profile_id_to_send = user_profile.id
