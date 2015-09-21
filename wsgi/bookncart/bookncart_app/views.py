@@ -905,6 +905,7 @@ def login_request(request):
             try:
                 gcm_model = GCMDevice.objects.get(user=user)
                 gcm_model.registration_id = gcm_token
+                gcm_model.active = True
                 gcm_model.save()
             except:
                 pass
