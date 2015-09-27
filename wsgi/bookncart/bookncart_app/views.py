@@ -427,7 +427,7 @@ def view_addresses(request):
     for add in address_list:
         addresses.append({'name': add.name, 'address_line_1': add.address_line_1, 'address_line_2': add.address_line_2,
                           'city': add.city, 'state': add.state, 'pincode': add.pincode,
-                          'mobile_number': add.mobile_number})
+                          'mobile_number': add.mobile_number, 'id': add.id})
 
     return JsonResponse({'addresses': addresses})
 
