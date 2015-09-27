@@ -1,3 +1,4 @@
+from ctypes import c_short
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpRequest, Http404, JsonResponse
@@ -411,6 +412,24 @@ def add_or_edit_address(request):
         except:
             error = True
     return JsonResponse({'error': error, 'id': address.id})
+
+
+@csrf_exempt
+def view_addresses(request):
+    user_profile_id = request.POST.get('user_profile_id', None)
+
+    addresses = []
+    try:
+        address_list = Address.objects.filter(user_id_id__exact=int(user_profile_id), is_active=True).order_by(
+            '-date_added')
+    except:
+        pass
+    for add in address_list:
+        addresses.append({'name': add.name, 'address_line_1': add.address_line_1, 'address_line_2': add.address_line_2,
+                          'city': add.city, 'state': add.state, 'pincode': add.pincode,
+                          'mobile_number': add.mobile_number})
+
+    return JsonResponse({'addresses': addresses})
 
 
 @csrf_exempt

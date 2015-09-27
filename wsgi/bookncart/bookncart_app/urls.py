@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^add_or_edit_address', views.add_or_edit_address, name='add_or_edit_address'),
     url(r'^add_review', views.add_review, name='add_review'),
     url(r'^view_reviews', views.view_reviews, name='view_reviews'),
+    url(r'^view_addresses', views.view_addresses, name='view_addresses'),
 ]
